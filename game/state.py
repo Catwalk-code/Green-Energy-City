@@ -1,48 +1,36 @@
-"""Game state management for Green Energy City."""
+"""Управление игровым состоянием для Green Energy City."""
 
 import random
 
 from game.card import Card
-from game.cards_data import CARDS, INTRO_CARD
+# Английские и русские наборы карточек импортируются оба;
+# нужный выбирается в reset() в зависимости от текущего языка.
+from game.cards_data import CARDS as _CARDS_EN, INTRO_CARD as _INTRO_EN
+from game.cards_data_ru import CARDS as _CARDS_RU, INTRO_CARD as _INTRO_RU
+from game import i18n
 
 
 class GameState:
-    """Tracks all mutable game state: stats, year, current card, etc."""
+    """Хранит всё изменяемое состояние игры: статы, год, текущую карточку и т.д."""
 
+    # Названия четырёх игровых характеристик
     STATS = ("energy", "economy", "environment", "happiness")
     STAT_ICONS = {
-        "energy": "⚡",
-        "economy": "💰",
+        "energy":      "⚡",
+        "economy":     "💰",
         "environment": "🌿",
-        "happiness": "😊",
+        "happiness":   "😊",
     }
 
-    WIN_YEAR = 2040  # Survive until this year to win
-
-    LOSS_REASONS = {
-        "energy": {
-            "low": "Power cuts became permanent.\nThe city went dark forever.",
-            "high": "Grid overload caused a catastrophic cascade failure.",
-        },
-        "economy": {
-            "low": "The city went bankrupt.\nAll public services collapsed.",
-            "high": "Hyperinflation wiped out every citizen's savings.",
-        },
-        "environment": {
-            "low": "Pollution made the city completely uninhabitable.",
-            "high": "Nature reclaimed the city and expelled its residents.",
-        },
-        "happiness": {
-            "low": "Citizens revolted and abandoned the city en masse.",
-            "high": "Complacency took hold — productivity ground to a halt.",
-        },
-    }
+    # Год, до которого нужно продержаться для победы
+    WIN_YEAR = 2040
 
     def __init__(self):
         self.reset()
 
     def reset(self):
-        """Reset to the initial game state."""
+        """Сбросить игровое состояние до начального."""
+        # Все статы начинаются с нейтрального значения 50
         self.stats = {stat: 50 for stat in self.STATS}
         self.year = 2024
         self.decisions_count = 0
@@ -50,88 +38,95 @@ class GameState:
         self.win = False
         self.game_over_reason = ""
 
-        self._deck = list(CARDS)
-        random.shuffle(self._deck)
-        self._played_ids = set()
+        # Выбрать колоду карточек по текущему языку интерфейса
+        cards = _CARDS_RU if i18n.get_lang() == 'ru' else _CARDS_EN
+        intro  = _INTRO_RU  if i18n.get_lang() == 'ru' else _INTRO_EN
 
-        self.current_card = INTRO_CARD
+        self._deck = list(cards)
+        random.shuffle(self._deck)
+        self._played_ids: set[int] = set()
+
+        # Первая карточка — всегда вступительная
+        self.current_card = intro
+        # Запомнить текущую колоду для перемешивания при исчерпании
+        self._cards_pool = cards
 
     # ------------------------------------------------------------------
-    # Card management
+    # Управление колодой карточек
     # ------------------------------------------------------------------
 
     def _check_conditions(self, card: Card) -> bool:
+        """Проверить, удовлетворяют ли текущие статы условиям карточки."""
         for stat, (min_val, max_val) in card.conditions.items():
             if not (min_val <= self.stats.get(stat, 50) <= max_val):
                 return False
         return True
 
     def _get_next_card(self) -> Card:
-        """Return the next card that satisfies current stat conditions."""
-        # First pass: find a conditional card that matches the current state
+        """Вернуть следующую карточку, удовлетворяющую текущим условиям."""
+        # Первый проход: приоритет условным карточкам, подходящим по стату
         for i, card in enumerate(self._deck):
             if card.conditions and self._check_conditions(card):
                 self._deck.pop(i)
                 return card
 
-        # Second pass: any unconditional card not yet played
+        # Второй проход: любая безусловная карточка, ещё не сыгранная
         for i, card in enumerate(self._deck):
             if not card.conditions and card.card_id not in self._played_ids:
                 self._deck.pop(i)
                 return card
 
-        # Reshuffle when the deck runs low
-        self._deck = [c for c in CARDS if not c.conditions]
+        # Колода исчерпана — перемешать только безусловные карточки
+        self._deck = [c for c in self._cards_pool if not c.conditions]
         random.shuffle(self._deck)
         self._played_ids.clear()
         return self._deck.pop(0)
 
     # ------------------------------------------------------------------
-    # Game logic
+    # Игровая логика
     # ------------------------------------------------------------------
 
     def apply_choice(self, direction: str) -> bool:
-        """
-        Apply the player's choice and advance game state.
+        """Применить выбор игрока и обновить игровое состояние.
 
         Args:
-            direction: ``'left'`` or ``'right'``.
+            direction: ``'left'`` (влево) или ``'right'`` (вправо).
 
         Returns:
-            ``True`` if the game continues, ``False`` if it is over.
+            ``True`` — игра продолжается; ``False`` — игра завершена.
         """
         card = self.current_card
+        # Определить выбранный вариант в зависимости от направления свайпа
         choice = card.right_choice if direction == "right" else card.left_choice
 
+        # Применить эффекты к статам с ограничением в диапазоне [0, 100]
         for stat, delta in choice.effects.items():
             self.stats[stat] = max(0, min(100, self.stats[stat] + delta))
 
         self._played_ids.add(card.card_id)
         self.decisions_count += 1
 
-        # Advance year every 4 decisions
+        # Каждые 4 решения — переходим к следующему году
         if self.decisions_count % 4 == 0:
             self.year += 1
 
-        # Check win condition
+        # Проверить условие победы
         if self.year >= self.WIN_YEAR:
             self.win = True
             self.game_over = True
-            self.game_over_reason = (
-                "You guided the city to a green future!\n"
-                "The year 2040 has arrived — mission accomplished."
-            )
+            # Текст победы берётся из модуля переводов
+            self.game_over_reason = i18n.t('win_reason').format(year=self.WIN_YEAR)
             return False
 
-        # Check loss conditions (stat at 0 or 100)
+        # Проверить условия поражения (стат достиг 0 или 100)
         for stat, value in self.stats.items():
             if value <= 0:
                 self.game_over = True
-                self.game_over_reason = self.LOSS_REASONS[stat]["low"]
+                self.game_over_reason = i18n.t(f'loss_{stat}_low')
                 return False
             if value >= 100:
                 self.game_over = True
-                self.game_over_reason = self.LOSS_REASONS[stat]["high"]
+                self.game_over_reason = i18n.t(f'loss_{stat}_high')
                 return False
 
         self.current_card = self._get_next_card()

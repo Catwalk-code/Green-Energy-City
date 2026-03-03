@@ -1,4 +1,4 @@
-"""Game-over screen for Green Energy City."""
+"""Экран конца игры для Green Energy City."""
 
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
@@ -7,6 +7,8 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.metrics import dp
 from kivy.lang import Builder
+
+from game import i18n
 
 Builder.load_string("""
 <GameOverScreen>:
@@ -20,32 +22,38 @@ Builder.load_string("""
 
 
 class GameOverScreen(Screen):
-    """Shown when the game ends (win or loss)."""
+    """Показывается при завершении игры (победа или поражение)."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._win = False
-        self._reason = ""
-        self._year = 2024
+        # Данные результата игры, переданные из GameScreen
+        self._win       = False
+        self._reason    = ""
+        self._year      = 2024
         self._decisions = 0
-        self._title_label = None
-        self._reason_label = None
-        self._stats_label = None
+        # Ссылки на виджеты, обновляемые при входе на экран
+        self._title_label      = None
+        self._reason_label     = None
+        self._stats_label      = None
+        self._play_again_btn   = None
+        self._menu_btn         = None
         self._build_ui()
 
     def setup(self, *, win: bool, reason: str, year: int, decisions: int):
-        self._win = win
-        self._reason = reason
-        self._year = year
+        """Сохранить результат игры для отображения при входе на экран."""
+        self._win       = win
+        self._reason    = reason
+        self._year      = year
         self._decisions = decisions
 
     def on_enter(self):
+        """Обновить все надписи экрана по текущему языку и результату игры."""
         if self._title_label:
             if self._win:
-                self._title_label.text = "🎉 Victory!"
+                self._title_label.text  = i18n.t('win_title')
                 self._title_label.color = (0.3, 1.0, 0.3, 1)
             else:
-                self._title_label.text = "💀 Game Over"
+                self._title_label.text  = i18n.t('lose_title')
                 self._title_label.color = (1.0, 0.35, 0.35, 1)
 
         if self._reason_label:
@@ -53,9 +61,15 @@ class GameOverScreen(Screen):
 
         if self._stats_label:
             self._stats_label.text = (
-                f"Year reached: {self._year}\n"
-                f"Decisions made: {self._decisions}"
+                i18n.t('year_reached').format(self._year) + "\n" +
+                i18n.t('decisions_made').format(self._decisions)
             )
+
+        # Обновить тексты кнопок в соответствии с текущим языком
+        if self._play_again_btn:
+            self._play_again_btn.text = i18n.t('play_again')
+        if self._menu_btn:
+            self._menu_btn.text = i18n.t('main_menu')
 
     def _build_ui(self):
         root = FloatLayout()
@@ -69,7 +83,7 @@ class GameOverScreen(Screen):
             padding=(dp(20), dp(10)),
         )
 
-        # Result title
+        # Заголовок результата (победа / поражение)
         self._title_label = Label(
             text="",
             font_size="34sp",
@@ -80,7 +94,7 @@ class GameOverScreen(Screen):
         )
         col.add_widget(self._title_label)
 
-        # Reason text
+        # Текст причины конца игры
         self._reason_label = Label(
             text="",
             font_size="15sp",
@@ -92,7 +106,7 @@ class GameOverScreen(Screen):
         )
         col.add_widget(self._reason_label)
 
-        # Stats
+        # Сводная статистика (год, количество решений)
         self._stats_label = Label(
             text="",
             font_size="14sp",
@@ -103,9 +117,9 @@ class GameOverScreen(Screen):
         )
         col.add_widget(self._stats_label)
 
-        # Play again button
-        play_again_btn = Button(
-            text="PLAY AGAIN",
+        # Кнопка «Играть снова»
+        self._play_again_btn = Button(
+            text=i18n.t('play_again'),
             font_size="20sp",
             bold=True,
             size_hint=(None, None),
@@ -114,12 +128,12 @@ class GameOverScreen(Screen):
             color=(1, 1, 1, 1),
             pos_hint={"center_x": 0.5},
         )
-        play_again_btn.bind(on_release=self._play_again)
-        col.add_widget(play_again_btn)
+        self._play_again_btn.bind(on_release=self._play_again)
+        col.add_widget(self._play_again_btn)
 
-        # Menu button
-        menu_btn = Button(
-            text="MAIN MENU",
+        # Кнопка «Главное меню»
+        self._menu_btn = Button(
+            text=i18n.t('main_menu'),
             font_size="16sp",
             size_hint=(None, None),
             size=(dp(200), dp(44)),
@@ -127,14 +141,16 @@ class GameOverScreen(Screen):
             color=(0.9, 0.9, 0.9, 1),
             pos_hint={"center_x": 0.5},
         )
-        menu_btn.bind(on_release=self._go_menu)
-        col.add_widget(menu_btn)
+        self._menu_btn.bind(on_release=self._go_menu)
+        col.add_widget(self._menu_btn)
 
         root.add_widget(col)
         self.add_widget(root)
 
     def _play_again(self, *_):
+        """Начать новую игру."""
         self.manager.current = "game"
 
     def _go_menu(self, *_):
+        """Вернуться в главное меню."""
         self.manager.current = "menu"

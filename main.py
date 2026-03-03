@@ -1,8 +1,8 @@
-"""Entry point for Green Energy City."""
+"""Точка входа в приложение Green Energy City."""
 
 import os
 
-# Use portrait orientation and fixed window size resembling a phone
+# Принудительный портретный режим и фиксированный размер окна (имитация телефона)
 os.environ.setdefault("KIVY_ORIENTATION", "Portrait")
 
 from kivy.config import Config
@@ -19,10 +19,11 @@ from ui.gameover_screen import GameOverScreen
 
 
 class GreenEnergyCityApp(App):
-    """Main Kivy application for Green Energy City."""
+    """Главное Kivy-приложение Green Energy City."""
 
     def build(self):
         self.title = "Green Energy City"
+        # Менеджер экранов с плавным переходом между ними
         sm = ScreenManager(transition=FadeTransition(duration=0.2))
         sm.add_widget(MenuScreen(name="menu"))
         sm.add_widget(GameScreen(name="game"))

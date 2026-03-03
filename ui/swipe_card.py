@@ -1,4 +1,4 @@
-"""Swipeable card widget for Green Energy City."""
+"""Виджет карточки с поддержкой свайпа для Green Energy City."""
 
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import (
@@ -15,20 +15,20 @@ Builder.load_string("""
     size_hint: None, None
     size: dp(300), dp(390)
 
-    # ── Card background (rotated) ───────────────────────────────────
+    # ── Фон карточки (с поворотом) ──────────────────────────────────
     canvas.before:
         PushMatrix
         Rotate:
             angle: root.card_rotation
             origin: root.center
-        # Soft drop-shadow
+        # Мягкая тень
         Color:
             rgba: 0, 0, 0, 0.18
         RoundedRectangle:
             pos: root.x + 4, root.y - 4
             size: root.size
             radius: [dp(18)]
-        # Card face
+        # Лицевая сторона карточки
         Color:
             rgba: root.card_color
         RoundedRectangle:
@@ -38,7 +38,7 @@ Builder.load_string("""
     canvas.after:
         PopMatrix
 
-    # ── Character name ───────────────────────────────────────────────
+    # ── Имя персонажа ────────────────────────────────────────────────
     Label:
         text: root.character_name
         font_size: sp(16)
@@ -51,7 +51,7 @@ Builder.load_string("""
         valign: 'middle'
         text_size: self.size
 
-    # ── Horizontal divider ───────────────────────────────────────────
+    # ── Горизонтальный разделитель ───────────────────────────────────
     Widget:
         size_hint: None, None
         size: root.width - dp(32), dp(1)
@@ -63,7 +63,7 @@ Builder.load_string("""
                 pos: self.pos
                 size: self.size
 
-    # ── Card body text ───────────────────────────────────────────────
+    # ── Текст карточки ───────────────────────────────────────────────
     Label:
         text: root.card_text
         font_size: sp(14)
@@ -75,7 +75,7 @@ Builder.load_string("""
         halign: 'center'
         valign: 'middle'
 
-    # ── Left choice label ────────────────────────────────────────────
+    # ── Метка левого варианта (свайп влево) ──────────────────────────
     Label:
         text: root.left_text
         font_size: sp(12)
@@ -96,7 +96,7 @@ Builder.load_string("""
                 size: self.size
                 radius: [dp(8)]
 
-    # ── Right choice label ───────────────────────────────────────────
+    # ── Метка правого варианта (свайп вправо) ────────────────────────
     Label:
         text: root.right_text
         font_size: sp(12)
@@ -117,9 +117,9 @@ Builder.load_string("""
                 size: self.size
                 radius: [dp(8)]
 
-    # ── Swipe hint ───────────────────────────────────────────────────
+    # ── Подсказка свайпа (текст берётся из свойства, зависит от языка) ──
     Label:
-        text: '← swipe to decide →'
+        text: root.swipe_hint
         font_size: sp(11)
         color: 0.5, 0.5, 0.5, 0.75
         size_hint: None, None
@@ -130,20 +130,22 @@ Builder.load_string("""
 
 
 class SwipeCard(FloatLayout):
-    """A card widget that can be swiped left or right to make a choice."""
+    """Виджет карточки, которую можно смахнуть влево или вправо."""
 
-    card_rotation = NumericProperty(0)
-    card_color = ListProperty([1, 1, 1, 1])
+    card_rotation  = NumericProperty(0)
+    card_color     = ListProperty([1, 1, 1, 1])
     character_name = StringProperty("Character")
-    card_text = StringProperty("Card text goes here.")
-    left_text = StringProperty("No")
-    right_text = StringProperty("Yes")
-    left_alpha = NumericProperty(0)
-    right_alpha = NumericProperty(0)
+    card_text      = StringProperty("Card text goes here.")
+    left_text      = StringProperty("No")
+    right_text     = StringProperty("Yes")
+    left_alpha     = NumericProperty(0)
+    right_alpha    = NumericProperty(0)
+    # Текст подсказки: обновляется при смене языка через модуль i18n
+    swipe_hint     = StringProperty("← swipe to decide →")
 
-    # Pixels of horizontal travel required to commit to a swipe decision
+    # Минимальное горизонтальное смещение (px) для подтверждения свайпа
     SWIPE_THRESHOLD = 100
-    # Maximum card tilt angle (degrees) during a drag; keeps text readable
+    # Максимальный угол наклона карточки (градусы) во время перетаскивания
     MAX_ROTATION = 10
 
     def __init__(self, **kwargs):
@@ -154,7 +156,7 @@ class SwipeCard(FloatLayout):
         self._animating = False
 
     # ------------------------------------------------------------------
-    # Touch handling
+    # Обработка касаний
     # ------------------------------------------------------------------
 
     def on_touch_down(self, touch):
@@ -172,14 +174,14 @@ class SwipeCard(FloatLayout):
         dx = touch.x - self._touch_start[0]
         dy = touch.y - self._touch_start[1]
 
-        # Translate card (vertical movement dampened)
+        # Перемещение карточки (вертикальное движение приглушено)
         self.x = self._orig_pos[0] + dx
         self.y = self._orig_pos[1] + dy * 0.25
 
-        # Tilt proportional to horizontal travel
+        # Наклон пропорционален горизонтальному смещению
         self.card_rotation = -(dx / Window.width) * self.MAX_ROTATION * 2.5
 
-        # Update choice hint overlays
+        # Показать подсветку варианта при приближении к порогу
         hint_start = self.SWIPE_THRESHOLD * 0.35
         hint_range = self.SWIPE_THRESHOLD * 0.65
 
@@ -221,10 +223,11 @@ class SwipeCard(FloatLayout):
         return True
 
     # ------------------------------------------------------------------
-    # Animations
+    # Анимации
     # ------------------------------------------------------------------
 
     def _swipe_out(self, direction):
+        """Анимировать вылет карточки за край экрана."""
         self._animating = True
         target_x = (Window.width * 1.4) if direction == "right" else (-self.width * 1.4)
         end_angle = self.MAX_ROTATION * 2 if direction == "right" else -self.MAX_ROTATION * 2
@@ -240,6 +243,7 @@ class SwipeCard(FloatLayout):
         anim.start(self)
 
     def _snap_back(self):
+        """Вернуть карточку на исходную позицию при отпускании."""
         if self._orig_pos is None:
             return
         anim = Animation(
@@ -253,11 +257,13 @@ class SwipeCard(FloatLayout):
         anim.start(self)
 
     def _reset_tint(self):
+        """Убрать цветовую подсветку после возврата карточки."""
         self.card_color = [1, 1, 1, 1]
         self.left_alpha = 0
         self.right_alpha = 0
 
     def _on_swipe_done(self, direction):
+        """Вызывается по окончании анимации вылета — передаёт результат."""
         self._animating = False
         if self.swipe_callback:
             self.swipe_callback(direction)
