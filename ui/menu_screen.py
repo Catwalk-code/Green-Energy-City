@@ -1,5 +1,7 @@
 """Экран главного меню для Green Energy City."""
 
+from functools import partial
+
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -21,17 +23,32 @@ Builder.load_string("""
             size: self.size
 """)
 
+# Цвета кнопок сложности: активная / неактивная
+_DIFF_ACTIVE   = (0.1, 0.65, 0.1, 1)
+_DIFF_INACTIVE = (0.15, 0.35, 0.15, 1)
+
+# Единственный источник правды для уровней сложности —
+# ключ перевода i18n и год победы из GameState.DIFFICULTY_YEARS
+_DIFFICULTY_OPTIONS = list(zip(
+    ['difficulty_easy', 'difficulty_medium', 'difficulty_hard'],
+    GameState.DIFFICULTY_YEARS.values(),   # [2030, 2035, 2040]
+))
+
 
 class MenuScreen(Screen):
-    """Экран запуска с названием игры и кнопкой начала."""
+    """Экран запуска с названием игры, выбором сложности и кнопкой начала."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Ссылки на виджеты с переводимым текстом
-        self._subtitle_label = None
-        self._play_btn       = None
-        self._legend_label   = None
-        self._lang_btn       = None
+        self._subtitle_label   = None
+        self._play_btn         = None
+        self._lang_btn         = None
+        self._difficulty_label = None
+        # Кнопки сложности в порядке: лёгкий, средний, сложный
+        self._diff_btns: list[Button] = []
+        # Выбранный год победы (по умолчанию — сложный уровень, 2040)
+        self._selected_year = 2040
         self._build_ui()
 
     def _build_ui(self):
@@ -54,44 +71,77 @@ class MenuScreen(Screen):
         # ── Основной вертикальный блок (центр экрана) ─────────────────
         col = BoxLayout(
             orientation="vertical",
-            size_hint=(0.8, None),
-            height=dp(380),
+            size_hint=(0.85, None),
+            height=dp(460),
             pos_hint={"center_x": 0.5, "center_y": 0.52},
-            spacing=dp(20),
-            padding=(dp(20), dp(10)),
+            spacing=dp(14),
+            padding=(dp(16), dp(8)),
         )
 
         # Иконка города
         col.add_widget(Label(
             text="🏙️",
-            font_size="72sp",
+            font_size="64sp",
             size_hint_y=None,
-            height=dp(100),
+            height=dp(85),
             halign="center",
         ))
 
-        # Название игры (не переводится — является логотипом)
+        # Название игры (логотип, не переводится)
         col.add_widget(Label(
             text="Green Energy City",
-            font_size="28sp",
+            font_size="26sp",
             bold=True,
             color=(0.4, 1.0, 0.4, 1),
             size_hint_y=None,
-            height=dp(50),
+            height=dp(44),
             halign="center",
         ))
 
-        # Подзаголовок (переводится)
+        # Подзаголовок — без указания конкретного года (переводится)
         self._subtitle_label = Label(
-            text=i18n.t('menu_subtitle').format(year=GameState.WIN_YEAR),
-            font_size="14sp",
+            text=i18n.t('menu_subtitle'),
+            font_size="13sp",
             color=(0.75, 0.95, 0.75, 1),
             size_hint_y=None,
-            height=dp(60),
+            height=dp(55),
             halign="center",
-            text_size=(dp(280), None),
+            text_size=(dp(290), None),
         )
         col.add_widget(self._subtitle_label)
+
+        # ── Раздел выбора сложности ───────────────────────────────────
+        self._difficulty_label = Label(
+            text=i18n.t('difficulty_label'),
+            font_size="13sp",
+            color=(0.65, 0.9, 0.65, 1),
+            size_hint_y=None,
+            height=dp(22),
+            halign="center",
+        )
+        col.add_widget(self._difficulty_label)
+
+        # Три кнопки сложности в горизонтальный ряд
+        diff_row = BoxLayout(
+            orientation="horizontal",
+            size_hint=(1, None),
+            height=dp(52),
+            spacing=dp(8),
+        )
+        self._diff_btns = []
+        for key, year in _DIFFICULTY_OPTIONS:
+            is_default = (year == self._selected_year)
+            btn = Button(
+                text=i18n.t(key),
+                font_size="11sp",
+                bold=True,
+                background_color=_DIFF_ACTIVE if is_default else _DIFF_INACTIVE,
+                color=(1, 1, 1, 1),
+            )
+            btn.bind(on_release=partial(self._select_difficulty, year))
+            self._diff_btns.append(btn)
+            diff_row.add_widget(btn)
+        col.add_widget(diff_row)
 
         # Кнопка начала игры (переводится)
         self._play_btn = Button(
@@ -107,20 +157,20 @@ class MenuScreen(Screen):
         self._play_btn.bind(on_release=self._start_game)
         col.add_widget(self._play_btn)
 
-        # Легенда статов (переводится)
-        self._legend_label = Label(
-            text=i18n.t('stats_legend'),
-            font_size="12sp",
-            color=(0.6, 0.85, 0.6, 1),
-            size_hint_y=None,
-            height=dp(40),
-            halign="center",
-            text_size=(dp(300), None),
-        )
-        col.add_widget(self._legend_label)
-
         root.add_widget(col)
         self.add_widget(root)
+
+    # ------------------------------------------------------------------
+    # Обработчики событий
+    # ------------------------------------------------------------------
+
+    def _select_difficulty(self, year: int, *_):
+        """Выбрать уровень сложности и визуально выделить кнопку."""
+        self._selected_year = year
+        GameState.set_difficulty(year)
+        # Обновить цвет всех кнопок сложности на основе _DIFFICULTY_OPTIONS
+        for btn, (_, btn_year) in zip(self._diff_btns, _DIFFICULTY_OPTIONS):
+            btn.background_color = _DIFF_ACTIVE if btn_year == year else _DIFF_INACTIVE
 
     def _toggle_lang(self, *_):
         """Переключить язык (EN ↔ RU) и обновить все переводимые надписи."""
@@ -130,10 +180,13 @@ class MenuScreen(Screen):
 
     def _update_labels(self):
         """Обновить тексты всех переводимых виджетов меню."""
-        self._subtitle_label.text = i18n.t('menu_subtitle').format(year=GameState.WIN_YEAR)
-        self._play_btn.text       = i18n.t('play')
-        self._legend_label.text   = i18n.t('stats_legend')
-        self._lang_btn.text       = i18n.t('lang_toggle')
+        self._subtitle_label.text   = i18n.t('menu_subtitle')
+        self._play_btn.text         = i18n.t('play')
+        self._lang_btn.text         = i18n.t('lang_toggle')
+        self._difficulty_label.text = i18n.t('difficulty_label')
+        # Обновить тексты кнопок сложности через единый список _DIFFICULTY_OPTIONS
+        for btn, (key, _) in zip(self._diff_btns, _DIFFICULTY_OPTIONS):
+            btn.text = i18n.t(key)
 
     def _start_game(self, *_):
         """Перейти к игровому экрану."""

@@ -1,14 +1,21 @@
 """Экран конца игры для Green Energy City."""
 
+import os
+
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.lang import Builder
 
 from game import i18n
+
+# Пути к иконкам результата игры
+_WIN_ICON  = os.path.join('data', 'icons', 'win.png')
+_LOSE_ICON = os.path.join('data', 'icons', 'lose.png')
 
 Builder.load_string("""
 <GameOverScreen>:
@@ -29,9 +36,10 @@ class GameOverScreen(Screen):
         # Данные результата игры, переданные из GameScreen
         self._win       = False
         self._reason    = ""
-        self._year      = 2024
+        self._year      = 2026
         self._decisions = 0
         # Ссылки на виджеты, обновляемые при входе на экран
+        self._result_icon      = None   # Image win.png / lose.png
         self._title_label      = None
         self._reason_label     = None
         self._stats_label      = None
@@ -48,6 +56,10 @@ class GameOverScreen(Screen):
 
     def on_enter(self):
         """Обновить все надписи экрана по текущему языку и результату игры."""
+        # Показать иконку победы или поражения
+        if self._result_icon:
+            self._result_icon.source = _WIN_ICON if self._win else _LOSE_ICON
+
         if self._title_label:
             if self._win:
                 self._title_label.text  = i18n.t('win_title')
@@ -77,19 +89,30 @@ class GameOverScreen(Screen):
         col = BoxLayout(
             orientation="vertical",
             size_hint=(0.85, None),
-            height=dp(420),
+            height=dp(460),
             pos_hint={"center_x": 0.5, "center_y": 0.55},
-            spacing=dp(18),
+            spacing=dp(14),
             padding=(dp(20), dp(10)),
         )
 
-        # Заголовок результата (победа / поражение)
+        # Иконка результата (win.png / lose.png) вместо эмодзи
+        self._result_icon = Image(
+            source="",          # устанавливается в on_enter()
+            size_hint=(None, None),
+            size=(dp(72), dp(72)),
+            pos_hint={"center_x": 0.5},
+            allow_stretch=True,
+            keep_ratio=True,
+        )
+        col.add_widget(self._result_icon)
+
+        # Заголовок результата (победа / поражение) — без эмодзи
         self._title_label = Label(
             text="",
-            font_size="34sp",
+            font_size="30sp",
             bold=True,
             size_hint_y=None,
-            height=dp(60),
+            height=dp(50),
             halign="center",
         )
         col.add_widget(self._title_label)
@@ -100,7 +123,7 @@ class GameOverScreen(Screen):
             font_size="15sp",
             color=(0.85, 0.95, 0.85, 1),
             size_hint_y=None,
-            height=dp(90),
+            height=dp(80),
             halign="center",
             text_size=(dp(280), None),
         )
@@ -112,7 +135,7 @@ class GameOverScreen(Screen):
             font_size="14sp",
             color=(0.65, 0.85, 0.65, 1),
             size_hint_y=None,
-            height=dp(60),
+            height=dp(55),
             halign="center",
         )
         col.add_widget(self._stats_label)

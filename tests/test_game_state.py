@@ -57,13 +57,17 @@ class TestGameState(unittest.TestCase):
         random.seed(42)
         self.gs = GameState()
 
+    def tearDown(self):
+        # Восстановить сложность по умолчанию после каждого теста
+        GameState.set_difficulty(2040)
+
     # ------------------------------------------------------------------ reset
     def test_initial_stats(self):
         for stat in GameState.STATS:
             self.assertEqual(self.gs.stats[stat], 50)
 
     def test_initial_year(self):
-        self.assertEqual(self.gs.year, 2024)
+        self.assertEqual(self.gs.year, 2026)
 
     def test_initial_not_game_over(self):
         self.assertFalse(self.gs.game_over)
@@ -96,12 +100,12 @@ class TestGameState(unittest.TestCase):
     def test_year_advances_every_4_decisions(self):
         for _ in range(4):
             self.gs.apply_choice("right")
-        self.assertEqual(self.gs.year, 2025)
+        self.assertEqual(self.gs.year, 2027)
 
     def test_year_does_not_advance_before_4_decisions(self):
         for _ in range(3):
             self.gs.apply_choice("right")
-        self.assertEqual(self.gs.year, 2024)
+        self.assertEqual(self.gs.year, 2026)
 
     def test_stat_clamped_at_zero(self):
         self.gs.stats["energy"] = 5
@@ -193,9 +197,52 @@ class TestGameState(unittest.TestCase):
             self.gs.apply_choice("right")
         self.gs.reset()
         self.assertEqual(self.gs.decisions_count, 0)
-        self.assertEqual(self.gs.year, 2024)
+        self.assertEqual(self.gs.year, 2026)
         for stat in GameState.STATS:
             self.assertEqual(self.gs.stats[stat], 50)
+
+    # ------------------------------------------------------------------ difficulty
+    def test_default_difficulty_is_hard(self):
+        """По умолчанию уровень сложности — сложный (2040)."""
+        self.assertEqual(self.gs.win_year, 2040)
+
+    def test_set_difficulty_easy_changes_win_year(self):
+        """Лёгкий уровень устанавливает год победы 2030."""
+        GameState.set_difficulty(2030)
+        self.gs.reset()
+        self.assertEqual(self.gs.win_year, 2030)
+
+    def test_set_difficulty_medium_changes_win_year(self):
+        """Средний уровень устанавливает год победы 2035."""
+        GameState.set_difficulty(2035)
+        self.gs.reset()
+        self.assertEqual(self.gs.win_year, 2035)
+
+    def test_win_easy_when_year_reaches_2030(self):
+        """При лёгком уровне победа наступает в 2030 году."""
+        GameState.set_difficulty(2030)
+        self.gs.reset()
+        self.gs.year = 2029
+        self.gs.decisions_count = 3
+        result = self.gs.apply_choice("right")
+        self.assertFalse(result)
+        self.assertTrue(self.gs.win)
+
+    def test_win_medium_when_year_reaches_2035(self):
+        """При среднем уровне победа наступает в 2035 году."""
+        GameState.set_difficulty(2035)
+        self.gs.reset()
+        self.gs.year = 2034
+        self.gs.decisions_count = 3
+        result = self.gs.apply_choice("right")
+        self.assertFalse(result)
+        self.assertTrue(self.gs.win)
+
+    def test_invalid_difficulty_ignored(self):
+        """Неверный год сложности должен игнорироваться."""
+        GameState.set_difficulty(2025)   # не в списке допустимых
+        self.gs.reset()
+        self.assertEqual(self.gs.win_year, 2040)  # должен остаться 2040
 
 
 if __name__ == "__main__":

@@ -19,12 +19,13 @@ Builder.load_string("""
 <_StatBar>:
     orientation: 'vertical'
     spacing: dp(1)
-    Label:
-        text: root.icon
-        font_size: sp(18)
+    # Иконка характеристики — PNG-картинка вместо эмодзи
+    Image:
+        source: root.icon
         size_hint_y: None
         height: dp(22)
-        halign: 'center'
+        allow_stretch: True
+        keep_ratio: True
     ProgressBar:
         id: pb
         max: 100
@@ -53,6 +54,7 @@ Builder.load_string("""
 
 class _StatBar(BoxLayout):
     from kivy.properties import StringProperty, NumericProperty
+    # Путь к PNG-иконке характеристики
     icon       = StringProperty("")
     label_text = StringProperty("")
     stat_value = NumericProperty(50)
@@ -61,12 +63,12 @@ class _StatBar(BoxLayout):
 class GameScreen(Screen):
     """Игровой экран со свайп-карточками и панелью характеристик."""
 
-    # Пары (ключ стата, иконка, ключ перевода подписи)
+    # Пары (ключ стата, путь к иконке, ключ перевода подписи)
     _STAT_META = [
-        ("energy",      "⚡", "stat_energy"),
-        ("economy",     "💰", "stat_economy"),
-        ("environment", "🌿", "stat_environment"),
-        ("happiness",   "😊", "stat_happiness"),
+        ("energy",      GameState.STAT_ICONS["energy"],      "stat_energy"),
+        ("economy",     GameState.STAT_ICONS["economy"],     "stat_economy"),
+        ("environment", GameState.STAT_ICONS["environment"], "stat_environment"),
+        ("happiness",   GameState.STAT_ICONS["happiness"],   "stat_happiness"),
     ]
 
     def __init__(self, **kwargs):
@@ -98,9 +100,9 @@ class GameScreen(Screen):
             stats_panel.add_widget(bar)
         root.add_widget(stats_panel)
 
-        # ── Метка текущего года ────────────────────────────────────────
+        # ── Метка текущего года (начинается с 2026) ───────────────────
         self._year_label = Label(
-            text="2024",
+            text="2026",
             font_size="20sp",
             bold=True,
             color=(0.6, 1.0, 0.6, 1),

@@ -1,12 +1,13 @@
 """Модуль интернационализации для Green Energy City.
 
 Поддерживает два языка:
-  'en' — английский (по умолчанию)
-  'ru' — русский
+  'ru' — русский (по умолчанию)
+  'en' — английский
 """
 
 # Текущий активный язык игры (глобальная переменная модуля)
-_lang: str = 'en'
+# По умолчанию — русский язык
+_lang: str = 'ru'
 
 
 def get_lang() -> str:
@@ -47,11 +48,18 @@ _STRINGS: dict[str, dict[str, str]] = {
 
         # ── Главное меню ──────────────────────────────────────────────
         'play': 'PLAY',
+        # Подзаголовок без указания года — год показывают кнопки сложности
         'menu_subtitle': (
-            "Guide your city to a green future by {year}.\n"
+            "Guide your city to a green future.\n"
             "Swipe cards left or right to make decisions."
         ),
-        'stats_legend': '⚡ Energy   💰 Economy   🌿 Environment   😊 Happiness',
+        'stats_legend': 'Energy   Economy   Environment   Happiness',
+
+        # ── Выбор сложности ───────────────────────────────────────────
+        'difficulty_label':  'Difficulty:',
+        'difficulty_easy':   'Easy\n(2030)',
+        'difficulty_medium': 'Medium\n(2035)',
+        'difficulty_hard':   'Hard\n(2040)',
 
         # ── Статусные полосы на игровом экране ────────────────────────
         'stat_energy':      'Energy',
@@ -63,8 +71,9 @@ _STRINGS: dict[str, dict[str, str]] = {
         'swipe_hint': '← swipe to decide →',
 
         # ── Экран конца игры ──────────────────────────────────────────
-        'win_title':      '🎉 Victory!',
-        'lose_title':     '💀 Game Over',
+        # Заголовки без эмодзи — вместо них показываются картинки win.png/lose.png
+        'win_title':      'Victory!',
+        'lose_title':     'Game Over',
         'year_reached':   'Year reached: {}',
         'decisions_made': 'Decisions made: {}',
         'play_again':     'PLAY AGAIN',
@@ -94,11 +103,18 @@ _STRINGS: dict[str, dict[str, str]] = {
 
         # ── Главное меню ──────────────────────────────────────────────
         'play': 'ИГРАТЬ',
+        # Подзаголовок без указания года — год показывают кнопки сложности
         'menu_subtitle': (
-            "Приведите город к зелёному будущему к {year} году.\n"
+            "Приведите город к зелёному будущему.\n"
             "Смахивайте карточки влево или вправо, чтобы принимать решения."
         ),
-        'stats_legend': '⚡ Энергия   💰 Экономика   🌿 Природа   😊 Счастье',
+        'stats_legend': 'Энергия   Экономика   Природа   Счастье',
+
+        # ── Выбор сложности ───────────────────────────────────────────
+        'difficulty_label':  'Сложность:',
+        'difficulty_easy':   'Лёгкий\n(2030)',
+        'difficulty_medium': 'Средний\n(2035)',
+        'difficulty_hard':   'Сложный\n(2040)',
 
         # ── Статусные полосы на игровом экране ────────────────────────
         'stat_energy':      'Энергия',
@@ -110,8 +126,9 @@ _STRINGS: dict[str, dict[str, str]] = {
         'swipe_hint': '← смахни для выбора →',
 
         # ── Экран конца игры ──────────────────────────────────────────
-        'win_title':      '🎉 Победа!',
-        'lose_title':     '💀 Игра окончена',
+        # Заголовки без эмодзи — вместо них показываются картинки win.png/lose.png
+        'win_title':      'Победа!',
+        'lose_title':     'Игра окончена',
         'year_reached':   'Достигнутый год: {}',
         'decisions_made': 'Принято решений: {}',
         'play_again':     'ИГРАТЬ СНОВА',

@@ -18,16 +18,23 @@ class TestI18nModule(unittest.TestCase):
     """Тесты базовой функциональности модуля i18n."""
 
     def setUp(self):
-        # Перед каждым тестом сбрасываем язык на английский
+        # Перед каждым тестом устанавливаем английский для изоляции тестов
         i18n.set_lang('en')
 
     def tearDown(self):
-        # После каждого теста восстанавливаем английский язык
-        i18n.set_lang('en')
+        # Восстанавливаем русский язык (по умолчанию) после каждого теста
+        i18n.set_lang('ru')
 
-    def test_default_language_is_english(self):
-        """По умолчанию язык должен быть английским."""
-        self.assertEqual(i18n.get_lang(), 'en')
+    def test_default_language_is_russian(self):
+        """По умолчанию язык модуля i18n должен быть русским."""
+        import importlib
+        # Перезагружаем модуль, чтобы увидеть его исходное значение переменной
+        importlib.reload(i18n)
+        try:
+            self.assertEqual(i18n._lang, 'ru')
+        finally:
+            # Восстановить английский для остальных тестов в этом классе
+            i18n.set_lang('en')
 
     def test_set_lang_to_russian(self):
         """set_lang('ru') должен устанавливать русский язык."""
@@ -65,6 +72,7 @@ class TestI18nModule(unittest.TestCase):
         """Все ключи, необходимые игре, должны присутствовать в английском словаре."""
         required_keys = [
             'lang_toggle', 'play', 'menu_subtitle', 'stats_legend',
+            'difficulty_label', 'difficulty_easy', 'difficulty_medium', 'difficulty_hard',
             'stat_energy', 'stat_economy', 'stat_environment', 'stat_happiness',
             'swipe_hint',
             'win_title', 'lose_title', 'year_reached', 'decisions_made',
@@ -85,6 +93,7 @@ class TestI18nModule(unittest.TestCase):
         i18n.set_lang('ru')
         required_keys = [
             'lang_toggle', 'play', 'menu_subtitle', 'stats_legend',
+            'difficulty_label', 'difficulty_easy', 'difficulty_medium', 'difficulty_hard',
             'stat_energy', 'stat_economy', 'stat_environment', 'stat_happiness',
             'swipe_hint',
             'win_title', 'lose_title', 'year_reached', 'decisions_made',
@@ -106,12 +115,22 @@ class TestI18nModule(unittest.TestCase):
             with self.subTest(lang=lang):
                 self.assertIn('{year}', i18n.t('win_reason'))
 
-    def test_menu_subtitle_contains_year_placeholder(self):
-        """Строка menu_subtitle должна содержать плейсхолдер {year}."""
+    def test_menu_subtitle_does_not_contain_year(self):
+        """Подзаголовок меню не должен содержать {year} — год показывают кнопки сложности."""
         for lang in ('en', 'ru'):
             i18n.set_lang(lang)
             with self.subTest(lang=lang):
-                self.assertIn('{year}', i18n.t('menu_subtitle'))
+                self.assertNotIn('{year}', i18n.t('menu_subtitle'))
+
+    def test_difficulty_keys_exist(self):
+        """Ключи сложности должны существовать в обоих языках."""
+        keys = ['difficulty_label', 'difficulty_easy', 'difficulty_medium', 'difficulty_hard']
+        for lang in ('en', 'ru'):
+            i18n.set_lang(lang)
+            for key in keys:
+                with self.subTest(lang=lang, key=key):
+                    result = i18n.t(key)
+                    self.assertNotEqual(result, key, f"Ключ '{key}' не найден в словаре '{lang}'")
 
     def test_russian_strings_are_different_from_english(self):
         """Русские переводы должны отличаться от английских."""
@@ -189,10 +208,12 @@ class TestGameStateWithLanguage(unittest.TestCase):
     def setUp(self):
         random.seed(42)
         i18n.set_lang('en')
+        GameState.set_difficulty(2040)  # сбросить сложность до «сложного»
 
     def tearDown(self):
-        # Восстановить язык после каждого теста
-        i18n.set_lang('en')
+        # Восстановить язык и сложность после каждого теста
+        i18n.set_lang('ru')
+        GameState.set_difficulty(2040)
 
     def test_reset_loads_english_cards_by_default(self):
         """При языке 'en' reset() должен загружать английские карточки."""

@@ -1,5 +1,6 @@
 """Управление игровым состоянием для Green Energy City."""
 
+import os
 import random
 
 from game.card import Card
@@ -15,15 +16,37 @@ class GameState:
 
     # Названия четырёх игровых характеристик
     STATS = ("energy", "economy", "environment", "happiness")
+
+    # Пути к иконкам характеристик (PNG-файлы вместо эмодзи)
     STAT_ICONS = {
-        "energy":      "⚡",
-        "economy":     "💰",
-        "environment": "🌿",
-        "happiness":   "😊",
+        "energy":      os.path.join('data', 'icons', 'energy.png'),
+        "economy":     os.path.join('data', 'icons', 'economy.png'),
+        "environment": os.path.join('data', 'icons', 'environment.png'),
+        "happiness":   os.path.join('data', 'icons', 'happiness.png'),
     }
 
-    # Год, до которого нужно продержаться для победы
+    # Максимальный год победы (режим «Сложно» / обратная совместимость)
     WIN_YEAR = 2040
+
+    # Уровни сложности: год победы для каждого уровня
+    DIFFICULTY_YEARS = {
+        'easy':   2030,
+        'medium': 2035,
+        'hard':   2040,
+    }
+
+    # Выбранный год победы (изменяется методом set_difficulty)
+    _difficulty_year: int = 2040
+
+    @classmethod
+    def set_difficulty(cls, year: int) -> None:
+        """Установить год победы в соответствии с выбранной сложностью.
+
+        Args:
+            year: Целевой год победы — 2030 (лёгкий), 2035 (средний) или 2040 (сложный).
+        """
+        if year in (2030, 2035, 2040):
+            cls._difficulty_year = year
 
     def __init__(self):
         self.reset()
@@ -32,7 +55,10 @@ class GameState:
         """Сбросить игровое состояние до начального."""
         # Все статы начинаются с нейтрального значения 50
         self.stats = {stat: 50 for stat in self.STATS}
-        self.year = 2024
+        # Игра начинается с 2026 года
+        self.year = 2026
+        # Целевой год победы для текущей партии берётся из выбранной сложности
+        self.win_year = GameState._difficulty_year
         self.decisions_count = 0
         self.game_over = False
         self.win = False
@@ -110,12 +136,12 @@ class GameState:
         if self.decisions_count % 4 == 0:
             self.year += 1
 
-        # Проверить условие победы
-        if self.year >= self.WIN_YEAR:
+        # Проверить условие победы (год партии достиг выбранного целевого года)
+        if self.year >= self.win_year:
             self.win = True
             self.game_over = True
             # Текст победы берётся из модуля переводов
-            self.game_over_reason = i18n.t('win_reason').format(year=self.WIN_YEAR)
+            self.game_over_reason = i18n.t('win_reason').format(year=self.win_year)
             return False
 
         # Проверить условия поражения (стат достиг 0 или 100)
