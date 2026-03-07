@@ -67,8 +67,8 @@ _STRINGS: dict[str, dict[str, str]] = {
         'stat_environment': 'Environ.',
         'stat_happiness':   'Happiness',
 
-        # ── Подсказка свайпа на карточке ──────────────────────────────
-        'swipe_hint': '← swipe to decide →',
+        # ── Подсказка свайпа на карточке (без стрелок — они теперь картинки) ──
+        'swipe_hint': 'swipe to decide',
 
         # ── Экран конца игры ──────────────────────────────────────────
         # Заголовки без эмодзи — вместо них показываются картинки win.png/lose.png
@@ -87,13 +87,13 @@ _STRINGS: dict[str, dict[str, str]] = {
 
         # ── Причины поражения (название_стат_уровень) ─────────────────
         'loss_energy_low':       "Power cuts became permanent.\nThe city went dark forever.",
-        'loss_energy_high':      "Grid overload caused a catastrophic cascade failure.",
+        'loss_energy_high':      "The power grid collapsed completely from overload.",
         'loss_economy_low':      "The city went bankrupt.\nAll public services collapsed.",
-        'loss_economy_high':     "Hyperinflation wiped out every citizen's savings.",
+        'loss_economy_high':     "Prices rose so fast that citizens lost all their savings.",
         'loss_environment_low':  "Pollution made the city completely uninhabitable.",
         'loss_environment_high': "Nature reclaimed the city and expelled its residents.",
         'loss_happiness_low':    "Citizens revolted and abandoned the city en masse.",
-        'loss_happiness_high':   "Complacency took hold — productivity ground to a halt.",
+        'loss_happiness_high':   "People became too comfortable — work and progress stopped.",
     },
 
     # ── Русский язык ──────────────────────────────────────────────────
@@ -122,8 +122,8 @@ _STRINGS: dict[str, dict[str, str]] = {
         'stat_environment': 'Природа',
         'stat_happiness':   'Счастье',
 
-        # ── Подсказка свайпа на карточке ──────────────────────────────
-        'swipe_hint': '← смахни для выбора →',
+        # ── Подсказка свайпа на карточке (без стрелок — они теперь картинки) ──
+        'swipe_hint': 'смахни для выбора',
 
         # ── Экран конца игры ──────────────────────────────────────────
         # Заголовки без эмодзи — вместо них показываются картинки win.png/lose.png
@@ -141,13 +141,13 @@ _STRINGS: dict[str, dict[str, str]] = {
         ),
 
         # ── Причины поражения ─────────────────────────────────────────
-        'loss_energy_low':       "Отключения электроэнергии стали постоянными.\nГород погрузился во тьму навсегда.",
-        'loss_energy_high':      "Перегрузка сети вызвала катастрофический каскадный сбой.",
-        'loss_economy_low':      "Город обанкротился.\nВсе государственные службы прекратили работу.",
-        'loss_economy_high':     "Гиперинфляция уничтожила сбережения каждого жителя.",
+        'loss_energy_low':       "Отключения света стали постоянными.\nГород погрузился во тьму навсегда.",
+        'loss_energy_high':      "Сеть не выдержала нагрузки и полностью вышла из строя.",
+        'loss_economy_low':      "Город остался без денег.\nВсе городские службы прекратили работу.",
+        'loss_economy_high':     "Цены выросли так быстро, что жители потеряли все сбережения.",
         'loss_environment_low':  "Загрязнение сделало город полностью непригодным для жизни.",
-        'loss_environment_high': "Природа отвоевала город и вытеснила его жителей.",
-        'loss_happiness_low':    "Жители подняли восстание и массово покинули город.",
-        'loss_happiness_high':   "Самодовольство распространилось — производительность упала до нуля.",
+        'loss_environment_high': "Природа захватила город и вытеснила его жителей.",
+        'loss_happiness_low':    "Жители устроили бунт и массово покинули город.",
+        'loss_happiness_high':   "Люди стали слишком довольны — работа и прогресс остановились.",
     },
 }

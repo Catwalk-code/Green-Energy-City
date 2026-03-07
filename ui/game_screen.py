@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import os
+
 from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -15,15 +17,27 @@ from game.state import GameState
 from game import i18n
 from ui.swipe_card import SwipeCard
 
+# Путь к иконке-точке для обозначения затрагиваемых характеристик
+_ICON_POINT = os.path.join('data', 'icons', 'point.png')
+
 Builder.load_string("""
 <_StatBar>:
     orientation: 'vertical'
     spacing: dp(1)
-    # Иконка характеристики — PNG-картинка вместо эмодзи
+    # Точка — появляется над иконкой, когда тяга карточки затрагивает этот стат
+    Image:
+        source: root.point_icon
+        size_hint_y: None
+        height: dp(10)
+        allow_stretch: True
+        keep_ratio: True
+        opacity: 1 if root.dot_visible else 0
+    # Иконка характеристики — PNG-картинка (высота уменьшена с dp(22) до dp(20)
+    # чтобы разместить точку-индикатор сверху в той же полосе статов)
     Image:
         source: root.icon
         size_hint_y: None
-        height: dp(22)
+        height: dp(20)
         allow_stretch: True
         keep_ratio: True
     ProgressBar:
@@ -53,11 +67,15 @@ Builder.load_string("""
 
 
 class _StatBar(BoxLayout):
-    from kivy.properties import StringProperty, NumericProperty
+    from kivy.properties import StringProperty, NumericProperty, BooleanProperty
     # Путь к PNG-иконке характеристики
-    icon       = StringProperty("")
-    label_text = StringProperty("")
-    stat_value = NumericProperty(50)
+    icon        = StringProperty("")
+    label_text  = StringProperty("")
+    stat_value  = NumericProperty(50)
+    # Путь к иконке-точке (показывается во время тяги карточки)
+    point_icon  = StringProperty(_ICON_POINT)
+    # True — показать точку над иконкой; False — скрыть
+    dot_visible = BooleanProperty(False)
 
 
 class GameScreen(Screen):
@@ -163,6 +181,8 @@ class GameScreen(Screen):
 
     def _show_card(self):
         """Показать текущую карточку игрового состояния с анимацией появления."""
+        # Сбросить точки при смене карточки
+        self._clear_dots()
         self._card_area.clear_widgets()
         gc = self.game_state.current_card
 
@@ -171,10 +191,12 @@ class GameScreen(Screen):
             card_text=gc.text,
             left_text=gc.left_choice.text,
             right_text=gc.right_choice.text,
-            # Подсказка свайпа берётся из модуля переводов
+            # Подсказка свайпа без стрелок (они — картинки в самом виджете)
             swipe_hint=i18n.t('swipe_hint'),
         )
         card.swipe_callback = self._on_swipe
+        # Подключить обратный вызов для точек-индикаторов затрагиваемых статов
+        card.drag_callback  = self._on_drag
         self._current_card  = card
 
         self._centre_card(card)
@@ -199,6 +221,27 @@ class GameScreen(Screen):
             self._show_card()
         else:
             self._go_to_game_over()
+
+    def _on_drag(self, direction: str | None):
+        """Показать/скрыть точки над статами при тяге карточки.
+
+        Args:
+            direction: 'left' / 'right' — показать точки на статах,
+                       которые изменятся при этом выборе; None — скрыть все.
+        """
+        if direction is None:
+            self._clear_dots()
+            return
+        card = self.game_state.current_card
+        choice = card.right_choice if direction == "right" else card.left_choice
+        affected = set(choice.effects.keys())
+        for stat, bar in self._stat_bars.items():
+            bar.dot_visible = stat in affected
+
+    def _clear_dots(self):
+        """Скрыть точки-индикаторы на всех полосах статов."""
+        for bar in self._stat_bars.values():
+            bar.dot_visible = False
 
     def _refresh_stats(self):
         """Обновить визуальные полосы статов и метку года."""

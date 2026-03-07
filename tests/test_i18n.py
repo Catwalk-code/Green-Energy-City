@@ -132,6 +132,15 @@ class TestI18nModule(unittest.TestCase):
                     result = i18n.t(key)
                     self.assertNotEqual(result, key, f"Ключ '{key}' не найден в словаре '{lang}'")
 
+    def test_swipe_hint_has_no_arrow_characters(self):
+        """Текст подсказки свайпа не должен содержать стрелки — они теперь картинки."""
+        for lang in ('en', 'ru'):
+            i18n.set_lang(lang)
+            with self.subTest(lang=lang):
+                hint = i18n.t('swipe_hint')
+                self.assertNotIn('←', hint, f"Стрелка ← найдена в swipe_hint ({lang})")
+                self.assertNotIn('→', hint, f"Стрелка → найдена в swipe_hint ({lang})")
+
     def test_russian_strings_are_different_from_english(self):
         """Русские переводы должны отличаться от английских."""
         keys_to_check = ['play', 'swipe_hint', 'win_title', 'lose_title', 'play_again', 'main_menu']
@@ -200,6 +209,22 @@ class TestRussianCardsData(unittest.TestCase):
                 self.assertIn(stat, valid_stats, f"Карточка {card.card_id}: неизвестный стат '{stat}'")
             for stat in card.right_choice.effects:
                 self.assertIn(stat, valid_stats, f"Карточка {card.card_id}: неизвестный стат '{stat}'")
+
+    def test_ru_intro_card_does_not_mention_2040(self):
+        """Вступительная карточка не должна упоминать 2040 — год теперь настраивается."""
+        self.assertNotIn('2040', INTRO_RU.text)
+
+    def test_en_intro_card_does_not_mention_2040(self):
+        """Английская вступительная карточка не должна упоминать 2040."""
+        self.assertNotIn('2040', INTRO_EN.text)
+
+    def test_ru_cards_no_complex_subsidize_term(self):
+        """Слово 'субсидировать' (сложное) должно быть заменено в карточках."""
+        for card in [INTRO_RU] + list(CARDS_RU):
+            with self.subTest(card_id=card.card_id):
+                self.assertNotIn('субсидировать', card.text.lower())
+                self.assertNotIn('субсидировать', card.left_choice.text.lower())
+                self.assertNotIn('субсидировать', card.right_choice.text.lower())
 
 
 class TestGameStateWithLanguage(unittest.TestCase):

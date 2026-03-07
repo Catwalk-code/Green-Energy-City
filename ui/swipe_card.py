@@ -1,5 +1,7 @@
 """Виджет карточки с поддержкой свайпа для Green Energy City."""
 
+import os
+
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import (
     NumericProperty,
@@ -9,6 +11,10 @@ from kivy.properties import (
 from kivy.animation import Animation
 from kivy.core.window import Window
 from kivy.lang import Builder
+
+# Пути к иконкам стрелок подсказки свайпа
+_ICON_LEFT_ARROW  = os.path.join('data', 'icons', 'leftarrow.png')
+_ICON_RIGHT_ARROW = os.path.join('data', 'icons', 'rightarrow.png')
 
 Builder.load_string("""
 <SwipeCard>:
@@ -117,15 +123,37 @@ Builder.load_string("""
                 size: self.size
                 radius: [dp(8)]
 
-    # ── Подсказка свайпа (текст берётся из свойства, зависит от языка) ──
-    Label:
-        text: root.swipe_hint
-        font_size: sp(11)
-        color: 0.5, 0.5, 0.5, 0.75
+    # ── Подсказка свайпа: [←картинка] [текст] [→картинка] ───────────
+    BoxLayout:
+        orientation: 'horizontal'
         size_hint: None, None
-        size: root.width, dp(24)
-        pos: root.x, root.y + dp(14)
-        halign: 'center'
+        size: root.width - dp(16), dp(28)
+        pos: root.x + dp(8), root.y + dp(8)
+        spacing: dp(4)
+        # Картинка левой стрелки
+        Image:
+            source: root.arrow_left_icon
+            size_hint: None, 1
+            width: dp(24)
+            allow_stretch: True
+            keep_ratio: True
+            opacity: 0.65
+        # Текст подсказки (без стрелок, зависит от языка)
+        Label:
+            text: root.swipe_hint
+            font_size: sp(11)
+            color: 0.5, 0.5, 0.5, 0.75
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+        # Картинка правой стрелки
+        Image:
+            source: root.arrow_right_icon
+            size_hint: None, 1
+            width: dp(24)
+            allow_stretch: True
+            keep_ratio: True
+            opacity: 0.65
 """)
 
 
@@ -140,8 +168,11 @@ class SwipeCard(FloatLayout):
     right_text     = StringProperty("Yes")
     left_alpha     = NumericProperty(0)
     right_alpha    = NumericProperty(0)
-    # Текст подсказки: обновляется при смене языка через модуль i18n
-    swipe_hint     = StringProperty("← swipe to decide →")
+    # Текст подсказки: без стрелок (они теперь картинки), обновляется при смене языка
+    swipe_hint      = StringProperty("swipe to decide")
+    # Пути к картинкам стрелок
+    arrow_left_icon  = StringProperty(_ICON_LEFT_ARROW)
+    arrow_right_icon = StringProperty(_ICON_RIGHT_ARROW)
 
     # Минимальное горизонтальное смещение (px) для подтверждения свайпа
     SWIPE_THRESHOLD = 100
@@ -153,7 +184,11 @@ class SwipeCard(FloatLayout):
         self._touch_start = None
         self._orig_pos = None
         self.swipe_callback = None
+        # Коллбэк для уведомления о текущем направлении перетаскивания:
+        # вызывается с 'left', 'right' или None (при сбросе/отпускании).
+        self.drag_callback = None
         self._animating = False
+        self._drag_direction = None  # текущее направление тяги (None / 'left' / 'right')
 
     # ------------------------------------------------------------------
     # Обработка касаний
@@ -192,6 +227,7 @@ class SwipeCard(FloatLayout):
             g = 1.0
             rb = 1.0 - alpha * 0.07
             self.card_color = [rb, g, rb, 1]
+            new_dir = "right"
         elif dx < -hint_start:
             alpha = min(1.0, (-dx - hint_start) / hint_range)
             self.left_alpha = alpha
@@ -199,10 +235,18 @@ class SwipeCard(FloatLayout):
             r = 1.0
             gb = 1.0 - alpha * 0.07
             self.card_color = [r, gb, gb, 1]
+            new_dir = "left"
         else:
             self.left_alpha = 0
             self.right_alpha = 0
             self.card_color = [1, 1, 1, 1]
+            new_dir = None
+
+        # Уведомить об изменении направления тяги (только при смене)
+        if new_dir != self._drag_direction:
+            self._drag_direction = new_dir
+            if self.drag_callback:
+                self.drag_callback(new_dir)
 
         return True
 
@@ -246,6 +290,11 @@ class SwipeCard(FloatLayout):
         """Вернуть карточку на исходную позицию при отпускании."""
         if self._orig_pos is None:
             return
+        # Сбросить уведомление о направлении тяги
+        if self._drag_direction is not None:
+            self._drag_direction = None
+            if self.drag_callback:
+                self.drag_callback(None)
         anim = Animation(
             x=self._orig_pos[0],
             y=self._orig_pos[1],

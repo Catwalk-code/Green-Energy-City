@@ -8,7 +8,7 @@ INTRO_CARD = Card(
     character="Mayor",
     text=(
         "Welcome, City Manager!\n\n"
-        "Our city is at a crossroads. We need a green energy future by 2040.\n"
+        "Our city is at a crossroads. We need a green energy future.\n"
         "Your decisions will shape our destiny."
     ),
     left_choice=Choice("I'm not ready", {"happiness": -5}),
@@ -40,11 +40,11 @@ CARDS = [
         card_id=3,
         character="Transport Minister",
         text=(
-            "We propose subsidizing electric vehicle purchases "
-            "to speed up the EV transition in our city."
+            "We propose offering discounts on electric vehicle purchases "
+            "to help citizens switch to clean transport faster."
         ),
-        left_choice=Choice("No subsidies", {"economy": 10, "environment": -10}),
-        right_choice=Choice("Approve subsidies", {"economy": -15, "environment": 15, "happiness": 10}),
+        left_choice=Choice("No discounts", {"economy": 10, "environment": -10}),
+        right_choice=Choice("Give discounts", {"economy": -15, "environment": 15, "happiness": 10}),
     ),
     Card(
         card_id=4,
@@ -178,10 +178,10 @@ CARDS = [
     ),
     Card(
         card_id=17,
-        character="Energy Poverty NGO",
+        character="Residents Support Group",
         text=(
             "Low-income residents can't afford their green energy bills. "
-            "Should the city subsidize their costs?"
+            "Should the city help cover part of their costs?"
         ),
         left_choice=Choice("They'll manage", {"happiness": -15, "economy": 5}),
         right_choice=Choice("Help them", {"happiness": 20, "economy": -15}),
@@ -322,7 +322,7 @@ CARDS = [
         character="Energy Crisis Advisor",
         text=(
             "Power cuts are becoming frequent. "
-            "We need emergency measures to stabilise the grid immediately."
+            "We need an emergency plan to fix the grid right away."
         ),
         left_choice=Choice("Ride it out", {"energy": -10, "happiness": -10}),
         right_choice=Choice("Emergency plan", {"energy": 20, "economy": -20}),
@@ -332,8 +332,8 @@ CARDS = [
         card_id=32,
         character="Finance Minister",
         text=(
-            "The city treasury is nearly empty. "
-            "Should we take an emergency green infrastructure loan?"
+            "The city is almost out of money. "
+            "Should we take an emergency loan for green energy projects?"
         ),
         left_choice=Choice("Refuse the loan", {"economy": -15, "energy": -5}),
         right_choice=Choice("Accept the loan", {"economy": 25, "environment": 10}),
