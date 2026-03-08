@@ -2,6 +2,10 @@
 title = Green Energy City
 package.name = greenenergycity
 package.domain = org.greenenergycity
+
+icon.filename = data/splash/icon.png
+presplash.filename = data/splash/presplash.jpg
+
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0
