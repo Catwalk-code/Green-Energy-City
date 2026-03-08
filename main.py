@@ -1,19 +1,32 @@
 """Точка входа в приложение Green Energy City."""
 
 import os
+import sys
 
-# Принудительный портретный режим и фиксированный размер окна (имитация телефона)
+# Принудительный портретный режим
 os.environ.setdefault("KIVY_ORIENTATION", "Portrait")
 
 from kivy.config import Config
-Config.set("graphics", "width", "400")
-Config.set("graphics", "height", "700")
-Config.set("graphics", "resizable", "0")
+
+# На Android не устанавливаем фиксированный размер — используем родное разрешение.
+# На десктопе задаём окно 400×700 для удобства разработки.
+_is_android = hasattr(sys, 'getandroidapilevel') or os.environ.get('ANDROID_ARGUMENT')
+if not _is_android:
+    Config.set("graphics", "width", "400")
+    Config.set("graphics", "height", "700")
+    Config.set("graphics", "resizable", "0")
+
 # Полноэкранный режим: скрывает системную строку состояния Android
 Config.set("graphics", "fullscreen", "auto")
 
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
+
+# Цвет фона приложения — заполняет всю область окна, включая края на
+# телефонах с вытянутым экраном, чтобы не было чёрных полос.
+_BG_COLOR = (0.04, 0.13, 0.04, 1)
+Window.clearcolor = _BG_COLOR
 
 
 def _enable_immersive_mode():
@@ -61,6 +74,8 @@ class GreenEnergyCityApp(App):
         self.title = "Green Energy City"
         # Включить режим погружения на Android (системная панель скрыта)
         _enable_immersive_mode()
+        # Повторно задать clearcolor после инициализации Window
+        Window.clearcolor = _BG_COLOR
         # Менеджер экранов с плавным переходом между ними
         sm = ScreenManager(transition=FadeTransition(duration=0.2))
         sm.add_widget(MenuScreen(name="menu"))

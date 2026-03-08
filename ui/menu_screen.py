@@ -1,5 +1,6 @@
 """Экран главного меню для Green Energy City."""
 
+import os
 from functools import partial
 
 from kivy.uix.screenmanager import Screen
@@ -7,11 +8,15 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.metrics import dp
 from kivy.lang import Builder
 
 from game.state import GameState
 from game import i18n
+
+# Путь к иконке приложения (отображается вместо эмодзи)
+_APP_ICON = os.path.join('data', 'splash', 'icon.png')
 
 Builder.load_string("""
 <MenuScreen>:
@@ -78,13 +83,13 @@ class MenuScreen(Screen):
             padding=(dp(16), dp(8)),
         )
 
-        # Иконка города
-        col.add_widget(Label(
-            text="🏙️",
-            font_size="64sp",
+        # Иконка приложения (PNG вместо эмодзи)
+        col.add_widget(Image(
+            source=_APP_ICON,
             size_hint_y=None,
             height=dp(85),
-            halign="center",
+            allow_stretch=True,
+            keep_ratio=True,
         ))
 
         # Название игры (логотип, не переводится)
