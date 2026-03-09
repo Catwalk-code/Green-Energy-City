@@ -6,6 +6,10 @@ import sys
 # Принудительный портретный режим
 os.environ.setdefault("KIVY_ORIENTATION", "Portrait")
 
+# Цвет фона устанавливается через переменную среды ДО инициализации Kivy,
+# чтобы на Android не было чёрной полосы сверху на вытянутых экранах.
+os.environ.setdefault("KIVY_BCK_COLOR", "0.04,0.13,0.04,1")
+
 from kivy.config import Config
 
 # На Android не устанавливаем фиксированный размер — используем родное разрешение.
@@ -15,9 +19,8 @@ if not _is_android:
     Config.set("graphics", "width", "400")
     Config.set("graphics", "height", "700")
     Config.set("graphics", "resizable", "0")
-
-# Полноэкранный режим: скрывает системную строку состояния Android
-Config.set("graphics", "fullscreen", "auto")
+    # Полноэкранный режим только на десктопе; на Android управляет buildozer.spec
+    Config.set("graphics", "fullscreen", "auto")
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -62,6 +65,7 @@ def _enable_immersive_mode():
     _set_flags()
 
 
+from ui.splash_screen import SplashScreen
 from ui.menu_screen import MenuScreen
 from ui.game_screen import GameScreen
 from ui.gameover_screen import GameOverScreen
@@ -78,9 +82,11 @@ class GreenEnergyCityApp(App):
         Window.clearcolor = _BG_COLOR
         # Менеджер экранов с плавным переходом между ними
         sm = ScreenManager(transition=FadeTransition(duration=0.2))
+        sm.add_widget(SplashScreen(name="splash"))
         sm.add_widget(MenuScreen(name="menu"))
         sm.add_widget(GameScreen(name="game"))
         sm.add_widget(GameOverScreen(name="gameover"))
+        sm.current = "splash"
         return sm
 
 

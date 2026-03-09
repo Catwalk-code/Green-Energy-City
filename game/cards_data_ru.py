@@ -408,4 +408,784 @@ CARDS = [
         right_choice=Choice("Действовать сразу", {"environment": 20, "economy": -20}),
         conditions={"environment": (0, 25)},
     ),
+    # Карточка 35
+    Card(
+        card_id=35,
+        character="Сборщик дождевой воды",
+        text=(
+            "Мы можем собирать дождевую воду с крыш. Её можно использовать для полива парков и смыва в туалетах."
+        ),
+        left_choice=Choice("Оставить всё как есть", {"environment": -5}),
+        right_choice=Choice("Собирать воду!", {"environment": 10, "economy": -5}),
+    ),
+    # Карточка 36
+    Card(
+        card_id=36,
+        character="Менеджер уличного освещения",
+        text=(
+            "Половина уличных фонарей работает на старых лампах. Переход на светодиоды сократит расход энергии и затраты."
+        ),
+        left_choice=Choice("Старые лампы подойдут", {"energy": -5, "economy": -5}),
+        right_choice=Choice("Перейти на светодиоды", {"energy": 10, "economy": 5}),
+    ),
+    # Карточка 37
+    Card(
+        card_id=37,
+        character="Лесник городских парков",
+        text=(
+            "Парки переполнены людьми. Мы можем расширить зелёные зоны на пустующих городских землях."
+        ),
+        left_choice=Choice("Не нужно", {"happiness": -5}),
+        right_choice=Choice("Расширить парки!", {"happiness": 15, "environment": 10, "economy": -10}),
+    ),
+    # Карточка 38
+    Card(
+        card_id=38,
+        character="Инспектор качества воздуха",
+        text=(
+            "Датчики показывают плохое качество воздуха у шоссе. Можно посадить живую изгородь из кустов и деревьев."
+        ),
+        left_choice=Choice("Оставить так", {"environment": -10, "happiness": -5}),
+        right_choice=Choice("Посадить изгородь", {"environment": 15, "happiness": 5, "economy": -5}),
+    ),
+    # Карточка 39
+    Card(
+        card_id=39,
+        character="Инженер по отоплению",
+        text=(
+            "Многие старые здания теряют тепло зимой. Улучшение утепления снизит счета за энергию."
+        ),
+        left_choice=Choice("Слишком дорого", {"energy": -10, "economy": -5}),
+        right_choice=Choice("Утеплить здания", {"energy": 15, "economy": -15, "happiness": 10}),
+    ),
+    # Карточка 40
+    Card(
+        card_id=40,
+        character="Рыночный торговец",
+        text=(
+            "Местные фермеры хотят продавать свежие продукты в центре города. Это сократит перевозки и поддержит бизнес."
+        ),
+        left_choice=Choice("Новых рынков не нужно", {"economy": 5, "environment": -5}),
+        right_choice=Choice("Открыть рынок", {"economy": 10, "environment": 5, "happiness": 10}),
+    ),
+    # Карточка 41
+    Card(
+        card_id=41,
+        character="Руководитель очистки реки",
+        text=(
+            "Берег городской реки покрыт мусором. Добровольческая уборка улучшит территорию."
+        ),
+        left_choice=Choice("Не первостепенно", {"environment": -10, "happiness": -5}),
+        right_choice=Choice("Организовать уборку", {"environment": 15, "happiness": 10, "economy": -5}),
+    ),
+    # Карточка 42
+    Card(
+        card_id=42,
+        character="Учитель науки в школе",
+        text=(
+            "Ученики хотят измерить качество воздуха и воды в городе в рамках научного проекта."
+        ),
+        left_choice=Choice("Пусть учатся по программе", {"happiness": -5}),
+        right_choice=Choice("Поддержать проект", {"happiness": 10, "environment": 5, "economy": -5}),
+    ),
+    # Карточка 43
+    Card(
+        card_id=43,
+        character="Ведущий местного радио",
+        text=(
+            "Еженедельное радиошоу о зелёных новостях города может повысить осведомлённость жителей."
+        ),
+        left_choice=Choice("Не важно", {"happiness": -5}),
+        right_choice=Choice("Запустить шоу", {"happiness": 10, "economy": -5}),
+    ),
+    # Карточка 44
+    Card(
+        card_id=44,
+        character="Руководитель спортклуба",
+        text=(
+            "Городской стадион потребляет много энергии. Солнечные панели на крыше смогут питать большую часть здания."
+        ),
+        left_choice=Choice("Слишком сложно", {"energy": -5}),
+        right_choice=Choice("Установить панели", {"energy": 15, "economy": -10, "environment": 5}),
+    ),
+    # Карточка 45
+    Card(
+        card_id=45,
+        character="Менеджер по отходам",
+        text=(
+            "Мы можем отделять пищевые отходы и превращать их в удобрение для городских парков."
+        ),
+        left_choice=Choice("Не стоит", {"environment": -5}),
+        right_choice=Choice("Запустить компостирование", {"environment": 15, "happiness": 5, "economy": -5}),
+    ),
+    # Карточка 46
+    Card(
+        card_id=46,
+        character="Директор велопроката",
+        text=(
+            "Велопрокат со стоянками сократит движение автомобилей и даст жителям дешёвый транспорт."
+        ),
+        left_choice=Choice("Не нужно", {"environment": -5, "happiness": -5}),
+        right_choice=Choice("Запустить велопрокат", {"environment": 10, "happiness": 15, "economy": -10}),
+    ),
+    # Карточка 47
+    Card(
+        card_id=47,
+        character="Директор больницы",
+        text=(
+            "Городская больница работает на резервных генераторах на ископаемом топливе. Переход на солнечные резервы снизит выбросы."
+        ),
+        left_choice=Choice("Слишком рискованно", {"environment": -10}),
+        right_choice=Choice("Перейти на солнечный резерв", {"environment": 15, "economy": -15}),
+    ),
+    # Карточка 48
+    Card(
+        card_id=48,
+        character="Руководитель общественного центра",
+        text=(
+            "Местный общественный центр хочет стать узлом с нулевыми отходами и учебным пространством."
+        ),
+        left_choice=Choice("Это не городское дело", {"happiness": -5}),
+        right_choice=Choice("Поддержать инициативу", {"happiness": 15, "economy": -5, "environment": 5}),
+    ),
+    # Карточка 49
+    Card(
+        card_id=49,
+        character="Смотритель реки",
+        text=(
+            "Рыба вернулась в очищенный участок реки. Можно защитить эту зону как природный заповедник."
+        ),
+        left_choice=Choice("Без ограничений", {"environment": -10}),
+        right_choice=Choice("Создать заповедник", {"environment": 20, "happiness": 5}),
+    ),
+    # Карточка 50
+    Card(
+        card_id=50,
+        character="Союз таксистов",
+        text=(
+            "Электротакси могут заменить старые дизельные машины. Город может предложить водителям льготные кредиты."
+        ),
+        left_choice=Choice("Пусть водители сами решают", {"environment": -10}),
+        right_choice=Choice("Предложить кредиты", {"environment": 15, "economy": -10, "happiness": 5}),
+    ),
+    # Карточка 51
+    Card(
+        card_id=51,
+        character="Молодёжный совет",
+        text=(
+            "Молодые люди хотят голосовать за то, какие зелёные проекты город будет финансировать."
+        ),
+        left_choice=Choice("Решают взрослые", {"happiness": -15}),
+        right_choice=Choice("Дать им голос", {"happiness": 20, "economy": -5}),
+    ),
+    # Карточка 52
+    Card(
+        card_id=52,
+        character="Строитель",
+        text=(
+            "Новый спортзал строится. Стоит ли использовать переработанную сталь и дерево вместо нового материала?"
+        ),
+        left_choice=Choice("Стандартные материалы", {"economy": 5, "environment": -10}),
+        right_choice=Choice("Использовать вторсырьё", {"economy": -10, "environment": 15}),
+    ),
+    # Карточка 53
+    Card(
+        card_id=53,
+        character="Директор библиотеки",
+        text=(
+            "Городская библиотека хочет проводить бесплатные мастер-классы по экономии энергии дома."
+        ),
+        left_choice=Choice("Это не дело библиотеки", {"happiness": -5}),
+        right_choice=Choice("Проводить мастер-классы", {"happiness": 10, "economy": -5, "environment": 5}),
+    ),
+    # Карточка 54
+    Card(
+        card_id=54,
+        character="Организатор фудбанка",
+        text=(
+            "Фудбанки собирают лишнюю еду из магазинов, чтобы сократить отходы и помочь нуждающимся."
+        ),
+        left_choice=Choice("Не городская проблема", {"happiness": -10, "environment": -5}),
+        right_choice=Choice("Поддержать город", {"happiness": 15, "environment": 5, "economy": -5}),
+    ),
+    # Карточка 55
+    Card(
+        card_id=55,
+        character="Компания по аренде самокатов",
+        text=(
+            "Компания хочет запустить аренду самокатов. Это сократит короткие поездки на авто."
+        ),
+        left_choice=Choice("Отказать им", {"environment": -5, "happiness": -5}),
+        right_choice=Choice("Разрешить самокаты", {"environment": 10, "happiness": 5, "economy": 5}),
+    ),
+    # Карточка 56
+    Card(
+        card_id=56,
+        character="Дизайнер детских площадок",
+        text=(
+            "Старые площадки можно заменить экологичными из натуральных и переработанных материалов."
+        ),
+        left_choice=Choice("Оставить старые", {"happiness": -5, "environment": -5}),
+        right_choice=Choice("Построить эко-площадки", {"happiness": 15, "environment": 10, "economy": -10}),
+    ),
+    # Карточка 57
+    Card(
+        card_id=57,
+        character="Городской архитектор",
+        text=(
+            "Новый офисный центр очень расточителен. Его можно перепроектировать для использования естественного света и вентиляции."
+        ),
+        left_choice=Choice("Слишком дорого сейчас", {"energy": -5, "environment": -5}),
+        right_choice=Choice("Перепроектировать", {"energy": 10, "environment": 10, "economy": -15}),
+    ),
+    # Карточка 58
+    Card(
+        card_id=58,
+        character="Организатор ночного рынка",
+        text=(
+            "Ежемесячный ночной рынок с местными товарами объединит людей и поддержит бизнес."
+        ),
+        left_choice=Choice("Слишком хлопотно", {"happiness": -5}),
+        right_choice=Choice("Одобрить рынок", {"happiness": 15, "economy": 5, "environment": 5}),
+    ),
+    # Карточка 59
+    Card(
+        card_id=59,
+        character="Водитель автобуса",
+        text=(
+            "Водители предлагают добавить маршруты в плохо обслуживаемые районы, чтобы сократить использование авто."
+        ),
+        left_choice=Choice("Маршрутов хватает", {"happiness": -10, "environment": -5}),
+        right_choice=Choice("Добавить маршруты", {"happiness": 15, "environment": 10, "economy": -10}),
+    ),
+    # Карточка 60
+    Card(
+        card_id=60,
+        character="Инспектор загрязнений",
+        text=(
+            "Завод тайно сбрасывает отходы в реку. Можно оштрафовать их и заставить провести очистку."
+        ),
+        left_choice=Choice("Подождать больше доказательств", {"environment": -20}),
+        right_choice=Choice("Штрафовать сейчас", {"environment": 20, "economy": 5, "happiness": 10}),
+    ),
+    # Карточка 61
+    Card(
+        card_id=61,
+        character="Организатор обмена одеждой",
+        text=(
+            "Ярмарка обмена одеждой сократит текстильные отходы и сэкономит деньги семьям."
+        ),
+        left_choice=Choice("Не городское мероприятие", {"environment": -5}),
+        right_choice=Choice("Поддержать", {"environment": 10, "happiness": 10, "economy": -5}),
+    ),
+    # Карточка 62
+    Card(
+        card_id=62,
+        character="Директор приюта для животных",
+        text=(
+            "Приют стоит в очереди на солнечные панели. Одобрение ускорит процесс."
+        ),
+        left_choice=Choice("Ждать общей очереди", {"energy": -5}),
+        right_choice=Choice("Одобрить быстро", {"energy": 5, "happiness": 10, "environment": 5}),
+    ),
+    # Карточка 63
+    Card(
+        card_id=63,
+        character="Эксперт по наводнениям",
+        text=(
+            "Риск наводнений растёт. Зелёные дренажные системы в дорогах и парках поглощают сильный дождь."
+        ),
+        left_choice=Choice("Старые дренажи справятся", {"environment": -10, "happiness": -5}),
+        right_choice=Choice("Построить зелёный дренаж", {"environment": 15, "happiness": 5, "economy": -10}),
+    ),
+    # Карточка 64
+    Card(
+        card_id=64,
+        character="Владелец пекарни",
+        text=(
+            "Местные пекарни хотят перейти на биогазовые печи на пищевых отходах. Нужна небольшая субсидия."
+        ),
+        left_choice=Choice("Не наше дело", {"environment": -5, "economy": -5}),
+        right_choice=Choice("Выдать субсидии", {"environment": 10, "economy": 5, "happiness": 5}),
+    ),
+    # Карточка 65
+    Card(
+        card_id=65,
+        character="Журналист",
+        text=(
+            "Газета пишет о зелёном прогрессе города. Открытый доступ к данным укрепит доверие."
+        ),
+        left_choice=Choice("Данные остаются закрытыми", {"happiness": -10}),
+        right_choice=Choice("Опубликовать данные", {"happiness": 15, "economy": -5}),
+    ),
+    # Карточка 66
+    Card(
+        card_id=66,
+        character="Регулятор электроэнергии",
+        text=(
+            "Дифференцированные тарифы позволяют жителям платить меньше за энергию в нерабочее время."
+        ),
+        left_choice=Choice("Нынешние тарифы подходят", {"energy": -5, "economy": -5}),
+        right_choice=Choice("Ввести тарифы", {"energy": 10, "economy": 10, "happiness": 5}),
+    ),
+    # Карточка 67
+    Card(
+        card_id=67,
+        character="Городской планировщик",
+        text=(
+            "Новый район строится. Сделать его безавтомобильным сразу дешевле, чем перестраивать потом."
+        ),
+        left_choice=Choice("Разрешить авто", {"environment": -10, "happiness": -5}),
+        right_choice=Choice("Зона без авто", {"environment": 20, "happiness": 10, "economy": -5}),
+    ),
+    # Карточка 68
+    Card(
+        card_id=68,
+        character="Коллектив художников",
+        text=(
+            "Местные художники хотят расписать городские стены мурали про зелёную жизнь."
+        ),
+        left_choice=Choice("Никаких мурали", {"happiness": -5}),
+        right_choice=Choice("Да мурали", {"happiness": 15, "environment": 5, "economy": -5}),
+    ),
+    # Карточка 69
+    Card(
+        card_id=69,
+        character="Группа пожилых жителей",
+        text=(
+            "Пожилые жители хотят простые руководства по экономии энергии дома."
+        ),
+        left_choice=Choice("Не приоритет", {"happiness": -5}),
+        right_choice=Choice("Выпустить руководства", {"happiness": 10, "economy": -5, "environment": 5}),
+    ),
+    # Карточка 70
+    Card(
+        card_id=70,
+        character="Группа анализа данных",
+        text=(
+            "Городские данные о потреблении энергии помогут лучше балансировать сеть."
+        ),
+        left_choice=Choice("Слишком сложно", {"energy": -5}),
+        right_choice=Choice("Использовать данные", {"energy": 15, "economy": -10, "environment": 5}),
+    ),
+    # Карточка 71
+    Card(
+        card_id=71,
+        character="Приложение для совместных поездок",
+        text=(
+            "Новое приложение помогает людям совместно ехать на работу. Город может его рекламировать бесплатно."
+        ),
+        left_choice=Choice("Пусть сами найдут", {"environment": -5, "happiness": -5}),
+        right_choice=Choice("Рекламировать", {"environment": 10, "happiness": 5}),
+    ),
+    # Карточка 72
+    Card(
+        card_id=72,
+        character="Член городского совета",
+        text=(
+            "Новый закон потребует устанавливать солнечную панель и бак для дождевой воды в каждом новом доме."
+        ),
+        left_choice=Choice("Слишком строго", {"economy": 5, "environment": -10}),
+        right_choice=Choice("Принять закон", {"economy": -10, "environment": 20, "energy": 5}),
+    ),
+    # Карточка 73
+    Card(
+        card_id=73,
+        character="Компания дрон-доставки",
+        text=(
+            "Электрические дроны могут сократить выбросы транспорта в центре города."
+        ),
+        left_choice=Choice("Пока не готово", {"environment": -5, "economy": -5}),
+        right_choice=Choice("Запустить пилот", {"environment": 10, "economy": 5, "happiness": 5}),
+    ),
+    # Карточка 74
+    Card(
+        card_id=74,
+        character="Менеджер школьной столовой",
+        text=(
+            "Школьные столовые могут трижды в неделю переходить на растительное меню, снижая выбросы от еды."
+        ),
+        left_choice=Choice("Дети не будут есть", {"environment": -10, "happiness": -5}),
+        right_choice=Choice("Попробовать", {"environment": 15, "happiness": 5, "economy": -5}),
+    ),
+    # Карточка 75
+    Card(
+        card_id=75,
+        character="Строительный инспектор",
+        text=(
+            "Старые муниципальные здания можно продать застройщикам с условием зелёного строительства."
+        ),
+        left_choice=Choice("Оставить здания", {"economy": -5, "environment": -5}),
+        right_choice=Choice("Продать с условиями", {"economy": 15, "environment": 10}),
+    ),
+    # Карточка 76
+    Card(
+        card_id=76,
+        character="Городской казначей",
+        text=(
+            "Зелёные облигации — займы инвесторов на экологические проекты — могут финансировать три новые солнечные фермы."
+        ),
+        left_choice=Choice("Слишком рискованно", {"energy": -10, "environment": -5}),
+        right_choice=Choice("Выпустить облигации", {"energy": 20, "environment": 10, "economy": -5}),
+    ),
+    # Карточка 77
+    Card(
+        card_id=77,
+        character="Лидер сообщества",
+        text=(
+            "Район хочет управлять своими небольшими ветряными турбинами и делить доходы между жителями."
+        ),
+        left_choice=Choice("Городское управление", {"happiness": -10}),
+        right_choice=Choice("Разрешить", {"happiness": 20, "energy": 5, "economy": 5}),
+    ),
+    # Карточка 78
+    Card(
+        card_id=78,
+        character="ИТ-менеджер",
+        text=(
+            "Онлайн-встречи вместо очных могут сократить деловые поездки и сэкономить время."
+        ),
+        left_choice=Choice("Оставить очные встречи", {"economy": -5, "environment": -5}),
+        right_choice=Choice("Перейти в онлайн", {"economy": 5, "environment": 10, "happiness": 5}),
+    ),
+    # Карточка 79
+    Card(
+        card_id=79,
+        character="Лесной скаут",
+        text=(
+            "Добровольцы хотят следить за здоровьем леса на окраинах города и сообщать о незаконных свалках."
+        ),
+        left_choice=Choice("Не нужно", {"environment": -10}),
+        right_choice=Choice("Поддержать добровольцев", {"environment": 15, "happiness": 5, "economy": -5}),
+    ),
+    # Карточка 80
+    Card(
+        card_id=80,
+        character="Начальник порта",
+        text=(
+            "Городской порт может заменить дизельные паромы электрическими лодками на возобновляемой энергии."
+        ),
+        left_choice=Choice("Паромы работают нормально", {"environment": -10, "energy": -5}),
+        right_choice=Choice("Заменить паромы", {"environment": 20, "energy": -5, "economy": -15}),
+    ),
+    # Карточка 81
+    Card(
+        card_id=81,
+        character="Спортивный тренер",
+        text=(
+            "Школы хотят установить спортивные тренажёры на открытом воздухе, которые производят кинетическую энергию."
+        ),
+        left_choice=Choice("Слишком экспериментально", {"energy": -5, "happiness": -5}),
+        right_choice=Choice("Построить их", {"energy": 5, "happiness": 15, "economy": -10}),
+    ),
+    # Карточка 82
+    Card(
+        card_id=82,
+        character="Менеджер местного банка",
+        text=(
+            "Городской банк может предложить льготные зелёные кредиты семьям на утепление домов."
+        ),
+        left_choice=Choice("Не наша роль", {"economy": -5, "environment": -5}),
+        right_choice=Choice("Запустить программу", {"economy": 10, "environment": 15, "happiness": 10}),
+    ),
+    # Карточка 83
+    Card(
+        card_id=83,
+        character="Дизайнер цифровых киосков",
+        text=(
+            "Интерактивные киоски в центре города расскажут туристам о наших зелёных проектах."
+        ),
+        left_choice=Choice("Пропустить киоски", {"happiness": -5}),
+        right_choice=Choice("Установить киоски", {"happiness": 10, "economy": -5, "environment": 5}),
+    ),
+    # Карточка 84
+    Card(
+        card_id=84,
+        character="Советник по ночной жизни",
+        text=(
+            "Ночные клубы и бары создают шум и световое загрязнение. Новые правила могут снизить это."
+        ),
+        left_choice=Choice("Никаких новых правил", {"happiness": 5, "environment": -10}),
+        right_choice=Choice("Ввести правила", {"happiness": -5, "environment": 15}),
+    ),
+    # Карточка 85
+    Card(
+        card_id=85,
+        character="Тепличный фермер",
+        text=(
+            "Городская теплица может выращивать свежие овощи круглый год на избыточном тепле заводов."
+        ),
+        left_choice=Choice("Слишком узко", {"economy": -5}),
+        right_choice=Choice("Построить теплицу", {"economy": 10, "environment": 10, "happiness": 5}),
+    ),
+    # Карточка 86
+    Card(
+        card_id=86,
+        character="Команда по ликвидации аварий",
+        text=(
+            "Городу нужны аварийные запасы энергии на случай экстремальной погоды."
+        ),
+        left_choice=Choice("Текущий резерв достаточен", {"energy": -10}),
+        right_choice=Choice("Создать запасы", {"energy": 15, "economy": -15, "happiness": 5}),
+    ),
+    # Карточка 87
+    Card(
+        card_id=87,
+        character="Директор технического лицея",
+        text=(
+            "Бесплатный курс по технологиям умного города может обучить 500 молодых людей за год."
+        ),
+        left_choice=Choice("Нет места в бюджете", {"economy": -5, "happiness": -5}),
+        right_choice=Choice("Финансировать курс", {"economy": -10, "happiness": 20, "energy": 5}),
+    ),
+    # Карточка 88
+    Card(
+        card_id=88,
+        character="Зелёный таксопарк",
+        text=(
+            "Десять электротакси войдут в городской парк. Можно добавить зарядки на стоянках."
+        ),
+        left_choice=Choice("Водители выбирают сами", {"environment": -10}),
+        right_choice=Choice("Добавить зарядки", {"environment": 15, "economy": -5, "happiness": 5}),
+    ),
+    # Карточка 89
+    Card(
+        card_id=89,
+        character="Городской биолог",
+        text=(
+            "Зелёный коридор между парками поможет птицам и насекомым перемещаться по всему городу."
+        ),
+        left_choice=Choice("Непрактично", {"environment": -10}),
+        right_choice=Choice("Построить коридор", {"environment": 20, "happiness": 5, "economy": -10}),
+    ),
+    # Карточка 90
+    Card(
+        card_id=90,
+        character="Группа огородников на крыше",
+        text=(
+            "Три офисных здания хотят превратить свои плоские крыши в огороды."
+        ),
+        left_choice=Choice("Слишком рискованно конструктивно", {"environment": -5}),
+        right_choice=Choice("Одобрить проекты", {"environment": 15, "happiness": 10, "economy": -5}),
+    ),
+    # Карточка 91
+    Card(
+        card_id=91,
+        character="Управление парковок",
+        text=(
+            "Два больших паркинга можно превратить в многофункциональные зелёные пространства."
+        ),
+        left_choice=Choice("Оставить парковки", {"economy": 5, "environment": -10}),
+        right_choice=Choice("Переоборудовать", {"economy": -10, "environment": 20, "happiness": 10}),
+    ),
+    # Карточка 92
+    Card(
+        card_id=92,
+        character="Инженер теплосетей",
+        text=(
+            "Подземные трубы с отработанным теплом заводов могут отапливать дома зимой."
+        ),
+        left_choice=Choice("Слишком дорого", {"energy": -10, "economy": -5}),
+        right_choice=Choice("Построить сеть", {"energy": 20, "economy": -20, "environment": 10}),
+    ),
+    # Карточка 93
+    Card(
+        card_id=93,
+        character="Организатор городского марафона",
+        text=(
+            "Ежегодный марафон может стать безотходным — без одноразовых стаканов и пластика."
+        ),
+        left_choice=Choice("Бегунам нужны стаканы", {"environment": -10}),
+        right_choice=Choice("Перейти на ноль отходов", {"environment": 15, "happiness": 5, "economy": -5}),
+    ),
+    # Карточка 94
+    Card(
+        card_id=94,
+        character="Инспектор детской безопасности",
+        text=(
+            "Безопасные пешеходные маршруты до школы сократят число автомобильных поездок, если пути хорошо освещены."
+        ),
+        left_choice=Choice("Дороги безопасны", {"environment": -10, "happiness": -5}),
+        right_choice=Choice("Улучшить тротуары", {"environment": 15, "happiness": 10, "economy": -10}),
+    ),
+    # Карточка 95
+    Card(
+        card_id=95,
+        character="Руководитель кафе починки",
+        text=(
+            "Ежемесячное кафе починки позволяет жителям чинить сломанные вещи вместо того, чтобы их выбрасывать."
+        ),
+        left_choice=Choice("Люди справятся дома", {"environment": -5}),
+        right_choice=Choice("Поддержать кафе", {"environment": 10, "happiness": 15, "economy": -5}),
+    ),
+    # Карточка 96
+    Card(
+        card_id=96,
+        character="Группа энергоаудита",
+        text=(
+            "Бесплатный аудит для городского бизнеса поможет снизить счета и загрязнение."
+        ),
+        left_choice=Choice("Бизнес решает сам", {"energy": -5, "environment": -5}),
+        right_choice=Choice("Провести аудит", {"energy": 10, "environment": 10, "economy": -5}),
+    ),
+    # Карточка 97
+    Card(
+        card_id=97,
+        character="Социальный работник",
+        text=(
+            "Новые жители хотят инструкции по раздельному сбору и экономии энергии на своих языках."
+        ),
+        left_choice=Choice("Одного языка достаточно", {"happiness": -10, "environment": -5}),
+        right_choice=Choice("Перевести инструкции", {"happiness": 15, "environment": 5, "economy": -5}),
+    ),
+    # Карточка 98
+    Card(
+        card_id=98,
+        character="Группа кинотеатра на открытом воздухе",
+        text=(
+            "Кинотеатр под открытым небом на солнечной энергии объединит жителей и покажет зелёные технологии."
+        ),
+        left_choice=Choice("Оставить обычные кинотеатры", {"happiness": -5, "environment": -5}),
+        right_choice=Choice("Запустить кинотеатр", {"happiness": 15, "environment": 5, "economy": -5}),
+    ),
+    # Карточка 99
+    Card(
+        card_id=99,
+        character="Компания приливной энергии",
+        text=(
+            "Приливные турбины под городским мостом могут давать чистую энергию без видимого вмешательства."
+        ),
+        left_choice=Choice("Слишком экспериментально", {"energy": -5}),
+        right_choice=Choice("Испытать турбины", {"energy": 15, "economy": -10, "environment": 5}),
+    ),
+    # Карточка 100
+    Card(
+        card_id=100,
+        character="Городской историк",
+        text=(
+            "Старые заводские здания можно отремонтировать как эко-офисы, а не сносить."
+        ),
+        left_choice=Choice("Снести их", {"environment": -10, "economy": 5}),
+        right_choice=Choice("Отремонтировать", {"environment": 15, "economy": -10, "happiness": 10}),
+    ),
+    # Карточка 101
+    Card(
+        card_id=101,
+        character="Сеть добровольцев",
+        text=(
+            "10 000 жителей записались снижать потребление электроэнергии с 17 до 19 часов ежедневно."
+        ),
+        left_choice=Choice("Люди не будут этим заниматься", {"energy": -5, "happiness": -5}),
+        right_choice=Choice("Запустить программу", {"energy": 15, "happiness": 10, "economy": 5}),
+    ),
+    # Карточка 102
+    Card(
+        card_id=102,
+        character="Дизайнер освещения",
+        text=(
+            "Умное уличное освещение — яркое только когда рядом люди — экономит 40% энергии."
+        ),
+        left_choice=Choice("Постоянное освещение безопаснее", {"energy": -10}),
+        right_choice=Choice("Установить умные огни", {"energy": 15, "economy": 10, "happiness": 5}),
+    ),
+    # Карточка 103
+    Card(
+        card_id=103,
+        character="Водный инженер",
+        text=(
+            "Протечки в трубах тратят 20% городской воды. Ремонт сэкономит деньги и ресурсы."
+        ),
+        left_choice=Choice("Потом", {"environment": -10, "economy": -5}),
+        right_choice=Choice("Починить сейчас", {"environment": 15, "economy": 10}),
+    ),
+    # Карточка 104
+    Card(
+        card_id=104,
+        character="Фан-клуб поп-звезды",
+        text=(
+            "Знаменитый музыкант предложил дать бесплатный зелёный концерт в городском парке."
+        ),
+        left_choice=Choice("Отказать вежливо", {"happiness": -10}),
+        right_choice=Choice("Принять предложение", {"happiness": 25, "economy": -5, "environment": 5}),
+    ),
+    # Карточка 105
+    Card(
+        card_id=105,
+        character="Городской офицер данных",
+        text=(
+            "Публикация карты загрязнений в реальном времени позволит жителям видеть качество воздуха на телефоне."
+        ),
+        left_choice=Choice("Данные остаются внутри", {"happiness": -5, "environment": -5}),
+        right_choice=Choice("Опубликовать карту", {"happiness": 10, "environment": 5}),
+    ),
+    # Карточка 106
+    Card(
+        card_id=106,
+        character="Руководитель библиотеки инструментов",
+        text=(
+            "Городская библиотека инструментов позволяет жителям брать дрели и лестницы, а не покупать новые."
+        ),
+        left_choice=Choice("Непрактично", {"economy": -5, "environment": -5}),
+        right_choice=Choice("Открыть библиотеку", {"economy": 5, "environment": 10, "happiness": 10}),
+    ),
+    # Карточка 107
+    Card(
+        card_id=107,
+        character="Планировщик зелёного фестиваля",
+        text=(
+            "Трёхдневный зелёный фестиваль с едой, музыкой и мастер-классами привлечёт гостей и поднимет экономику."
+        ),
+        left_choice=Choice("Слишком дорого", {"economy": -5, "happiness": -5}),
+        right_choice=Choice("Организовать фестиваль", {"economy": 10, "happiness": 20, "environment": 5}),
+    ),
+    # Карточка 108
+    Card(
+        card_id=108,
+        character="Детский врач",
+        text=(
+            "Загрязнение воздуха у начальных школ вызывает проблемы с дыханием у детей. Нужны действия."
+        ),
+        left_choice=Choice("Уровни в пределах нормы", {"environment": -15, "happiness": -10}),
+        right_choice=Choice("Создать чистые зоны", {"environment": 20, "happiness": 10, "economy": -10}),
+    ),
+    # Карточка 109
+    Card(
+        card_id=109,
+        character="Бригада по ремонту велосипедов",
+        text=(
+            "Бесплатный ремонт велосипедов увеличит число велосипедистов и снизит использование авто."
+        ),
+        left_choice=Choice("Люди чинят сами", {"environment": -5, "happiness": -5}),
+        right_choice=Choice("Финансировать программу", {"environment": 10, "happiness": 10, "economy": -5}),
+    ),
+    # Карточка 110
+    Card(
+        card_id=110,
+        character="Уличный торговец едой",
+        text=(
+            "Электрические кафетерии в парках сократят упаковку от еды навынос и порадуют гостей."
+        ),
+        left_choice=Choice("Оставить рестораны", {"happiness": -5, "environment": -5}),
+        right_choice=Choice("Разрешить электрические кафетерии", {"happiness": 10, "environment": 5, "economy": 5}),
+    ),
+    # Карточка 111
+    Card(
+        card_id=111,
+        character="Ночной сторож",
+        text=(
+            "Офисы и магазины оставляют свет включённым всю ночь. Правило выключать свет после закрытия сэкономит энергию."
+        ),
+        left_choice=Choice("Выбор бизнеса", {"energy": -10, "environment": -5}),
+        right_choice=Choice("Ввести правило", {"energy": 15, "environment": 10, "happiness": -5}),
+    ),
+    # Карточка 112
+    Card(
+        card_id=112,
+        character="Советник по зелёному будущему",
+        text=(
+            "Город может поставить официальную цель — 100% возобновляемая энергия к 2040 году — и опубликовать план."
+        ),
+        left_choice=Choice("Цели могут меняться", {"happiness": -10, "environment": -5}),
+        right_choice=Choice("Взять на себя обязательство", {"happiness": 15, "environment": 20, "energy": 5, "economy": -5}),
+    ),
 ]
