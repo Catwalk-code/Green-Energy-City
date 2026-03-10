@@ -47,10 +47,10 @@ Builder.load_string("""
         height: dp(8)
     Label:
         text: root.label_text
-        font_size: sp(12)
+        font_size: sp(16)
         color: 0.85, 0.85, 0.85, 1
         size_hint_y: None
-        height: dp(18)
+        height: dp(22)
         halign: 'center'
         text_size: self.size
         valign: 'top'
@@ -120,11 +120,11 @@ class GameScreen(Screen):
         # ── Метка текущего года (начинается с 2026) ───────────────────
         self._year_label = Label(
             text="2026",
-            font_size="20sp",
+            font_size="28sp",
             bold=True,
             color=(0.6, 1.0, 0.6, 1),
             size_hint=(None, None),
-            size=(dp(120), dp(28)),
+            size=(dp(140), dp(36)),
             pos_hint={"center_x": 0.5},
             halign="center",
         )
@@ -144,7 +144,7 @@ class GameScreen(Screen):
     def _on_size(self, *_):
         w, h = self.size
         stats_h = dp(96)
-        year_h  = dp(28)
+        year_h  = dp(36)
         year_y  = h - stats_h - year_h - dp(4)
         self._year_label.y = year_y
 
