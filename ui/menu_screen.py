@@ -77,7 +77,7 @@ class MenuScreen(Screen):
         col = BoxLayout(
             orientation="vertical",
             size_hint=(0.85, None),
-            height=dp(480),
+            height=dp(515),
             pos_hint={"center_x": 0.5, "center_y": 0.52},
             spacing=dp(14),
             padding=(dp(16), dp(8)),
@@ -87,7 +87,7 @@ class MenuScreen(Screen):
         col.add_widget(Image(
             source=_APP_ICON,
             size_hint_y=None,
-            height=dp(85),
+            height=dp(120),
             allow_stretch=True,
             keep_ratio=True,
         ))
