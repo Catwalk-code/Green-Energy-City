@@ -47,12 +47,13 @@ Builder.load_string("""
     # ── Имя персонажа ────────────────────────────────────────────────
     Label:
         text: root.character_name
-        font_size: sp(16)
+        font_size: sp(22)
         bold: True
         color: 0.15, 0.45, 0.15, 1
         size_hint: None, None
-        size: root.width - dp(32), dp(38)
-        pos: root.x + dp(16), root.top - dp(52)
+        size: root.width - dp(32), dp(44)
+        # dp(58) = dp(44) name height + dp(14) top margin
+        pos: root.x + dp(16), root.top - dp(58)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
@@ -61,7 +62,8 @@ Builder.load_string("""
     Widget:
         size_hint: None, None
         size: root.width - dp(32), dp(1)
-        pos: root.x + dp(16), root.top - dp(56)
+        # dp(62) = dp(58) name bottom + dp(4) gap
+        pos: root.x + dp(16), root.top - dp(62)
         canvas:
             Color:
                 rgba: 0.75, 0.9, 0.75, 1
@@ -72,11 +74,12 @@ Builder.load_string("""
     # ── Текст карточки ───────────────────────────────────────────────
     Label:
         text: root.card_text
-        font_size: sp(14)
+        font_size: sp(18)
         color: 0.12, 0.12, 0.12, 1
         size_hint: None, None
-        size: root.width - dp(32), root.height - dp(130)
-        pos: root.x + dp(16), root.y + dp(55)
+        # height = card height minus header (62dp) and footer (60dp from bottom) + 18dp adjustment
+        size: root.width - dp(32), root.height - dp(140)
+        pos: root.x + dp(16), root.y + dp(60)
         text_size: self.size
         halign: 'center'
         valign: 'middle'
@@ -84,13 +87,13 @@ Builder.load_string("""
     # ── Метка левого варианта (свайп влево) ──────────────────────────
     Label:
         text: root.left_text
-        font_size: sp(12)
+        font_size: sp(16)
         bold: True
         color: 0.85, 0.15, 0.15, root.left_alpha
         opacity: root.left_alpha
         size_hint: None, None
-        size: root.width * 0.42, dp(32)
-        pos: root.x + dp(10), root.center_y - dp(16)
+        size: root.width * 0.42, dp(36)
+        pos: root.x + dp(10), root.center_y - dp(18)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
@@ -105,13 +108,13 @@ Builder.load_string("""
     # ── Метка правого варианта (свайп вправо) ────────────────────────
     Label:
         text: root.right_text
-        font_size: sp(12)
+        font_size: sp(16)
         bold: True
         color: 0.1, 0.65, 0.1, root.right_alpha
         opacity: root.right_alpha
         size_hint: None, None
-        size: root.width * 0.42, dp(32)
-        pos: root.right - root.width * 0.42 - dp(10), root.center_y - dp(16)
+        size: root.width * 0.42, dp(36)
+        pos: root.right - root.width * 0.42 - dp(10), root.center_y - dp(18)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
@@ -141,7 +144,7 @@ Builder.load_string("""
         # Текст подсказки (без стрелок, зависит от языка)
         Label:
             text: root.swipe_hint
-            font_size: sp(11)
+            font_size: sp(14)
             color: 0.5, 0.5, 0.5, 0.75
             halign: 'center'
             valign: 'middle'
