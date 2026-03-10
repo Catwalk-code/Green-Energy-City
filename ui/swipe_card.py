@@ -93,7 +93,7 @@ Builder.load_string("""
         opacity: root.left_alpha
         size_hint: None, None
         size: root.width * 0.42, dp(36)
-        pos: root.x + dp(10), root.center_y - dp(18)
+        pos: root.right - root.width * 0.42 - dp(10), root.center_y - dp(18)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
@@ -114,7 +114,7 @@ Builder.load_string("""
         opacity: root.right_alpha
         size_hint: None, None
         size: root.width * 0.42, dp(36)
-        pos: root.right - root.width * 0.42 - dp(10), root.center_y - dp(18)
+        pos: root.x + dp(10), root.center_y - dp(18)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
