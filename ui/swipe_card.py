@@ -47,7 +47,7 @@ Builder.load_string("""
     # ── Имя персонажа ────────────────────────────────────────────────
     Label:
         text: root.character_name
-        font_size: sp(22)
+        font_size: sp(17)
         bold: True
         color: 0.15, 0.45, 0.15, 1
         size_hint: None, None
