@@ -127,7 +127,10 @@ class GreenEnergyCityApp(App):
         sm.add_widget(MenuScreen(name="menu"))
         sm.add_widget(GameScreen(name="game"))
         sm.add_widget(GameOverScreen(name="gameover"))
-        sm.current = "splash"
+        # На Android нативная presplash (buildozer.spec) уже показала логотип
+        # пока грузилось приложение — повторный показ Python-заставки вызывает
+        # мерцание. Сразу переходим в меню. На десктопе показываем заставку.
+        sm.current = "menu" if _is_android else "splash"
         return sm
 
     def on_resume(self):
