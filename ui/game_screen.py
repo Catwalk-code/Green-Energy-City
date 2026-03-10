@@ -47,7 +47,7 @@ Builder.load_string("""
         height: dp(8)
     Label:
         text: root.label_text
-        font_size: sp(18)
+        font_size: sp(13)
         color: 0.85, 0.85, 0.85, 1
         size_hint_y: None
         height: dp(24)
