@@ -62,10 +62,10 @@ class MenuScreen(Screen):
         # ── Кнопка смены языка (верхний правый угол) ──────────────────
         self._lang_btn = Button(
             text=i18n.t('lang_toggle'),
-            font_size="14sp",
+            font_size="16sp",
             bold=True,
             size_hint=(None, None),
-            size=(dp(52), dp(36)),
+            size=(dp(60), dp(40)),
             pos_hint={"right": 0.98, "top": 0.98},
             background_color=(0.1, 0.4, 0.1, 1),
             color=(0.9, 1.0, 0.9, 1),
@@ -77,7 +77,7 @@ class MenuScreen(Screen):
         col = BoxLayout(
             orientation="vertical",
             size_hint=(0.85, None),
-            height=dp(460),
+            height=dp(480),
             pos_hint={"center_x": 0.5, "center_y": 0.52},
             spacing=dp(14),
             padding=(dp(16), dp(8)),
@@ -95,21 +95,21 @@ class MenuScreen(Screen):
         # Название игры (логотип, не переводится)
         col.add_widget(Label(
             text="Green Energy City",
-            font_size="26sp",
+            font_size="32sp",
             bold=True,
             color=(0.4, 1.0, 0.4, 1),
             size_hint_y=None,
-            height=dp(44),
+            height=dp(50),
             halign="center",
         ))
 
         # Подзаголовок — без указания конкретного года (переводится)
         self._subtitle_label = Label(
             text=i18n.t('menu_subtitle'),
-            font_size="13sp",
+            font_size="16sp",
             color=(0.75, 0.95, 0.75, 1),
             size_hint_y=None,
-            height=dp(55),
+            height=dp(60),
             halign="center",
             text_size=(dp(290), None),
         )
@@ -118,10 +118,10 @@ class MenuScreen(Screen):
         # ── Раздел выбора сложности ───────────────────────────────────
         self._difficulty_label = Label(
             text=i18n.t('difficulty_label'),
-            font_size="13sp",
+            font_size="15sp",
             color=(0.65, 0.9, 0.65, 1),
             size_hint_y=None,
-            height=dp(22),
+            height=dp(26),
             halign="center",
         )
         col.add_widget(self._difficulty_label)
@@ -138,7 +138,7 @@ class MenuScreen(Screen):
             is_default = (year == self._selected_year)
             btn = Button(
                 text=i18n.t(key),
-                font_size="11sp",
+                font_size="14sp",
                 bold=True,
                 background_color=_DIFF_ACTIVE if is_default else _DIFF_INACTIVE,
                 color=(1, 1, 1, 1),
@@ -151,10 +151,10 @@ class MenuScreen(Screen):
         # Кнопка начала игры (переводится)
         self._play_btn = Button(
             text=i18n.t('play'),
-            font_size="22sp",
+            font_size="26sp",
             bold=True,
             size_hint=(None, None),
-            size=(dp(200), dp(55)),
+            size=(dp(220), dp(60)),
             background_color=(0.15, 0.7, 0.15, 1),
             color=(1, 1, 1, 1),
             pos_hint={"center_x": 0.5},
