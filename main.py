@@ -37,6 +37,8 @@ def _enable_immersive_mode():
 
     Скрывает системную строку состояния и навигационную панель.
     При касании края экрана панели кратко появляются и снова прячутся.
+    Также распространяет контент за вырез экрана (notch/punch-hole),
+    чтобы не было чёрной полосы сверху на устройствах с таким вырезом.
     На не-Android платформах вызов игнорируется.
     """
     try:
@@ -48,19 +50,58 @@ def _enable_immersive_mode():
 
     @run_on_ui_thread
     def _set_flags():
-        View     = autoclass('android.view.View')
-        Activity = autoclass('org.kivy.android.PythonActivity')
-        window   = Activity.mActivity.getWindow()
-        decor    = window.getDecorView()
-        flags = (
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        )
-        decor.setSystemUiVisibility(flags)
+        Activity         = autoclass('org.kivy.android.PythonActivity')
+        Build_VERSION    = autoclass('android.os.Build$VERSION')
+        activity         = Activity.mActivity
+        window           = activity.getWindow()
+        decor            = window.getDecorView()
+
+        # Расширить контент за вырез (notch) на API 28+ (Android 9+).
+        # LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES = 1
+        # Без этого система оставляет чёрную полосу высотой выреза у края экрана.
+        try:
+            WindowManager_LayoutParams = autoclass(
+                'android.view.WindowManager$LayoutParams'
+            )
+            lp = window.getAttributes()
+            lp.layoutInDisplayCutoutMode = (
+                WindowManager_LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            )
+            window.setAttributes(lp)
+        except Exception:
+            pass
+
+        if Build_VERSION.SDK_INT >= 30:
+            # API 30+ (Android 11+): WindowInsetsController
+            # setSystemUiVisibility устарел; используем новый API.
+            try:
+                WindowInsetsController = autoclass(
+                    'android.view.WindowInsetsController'
+                )
+                WindowInsets_Type = autoclass('android.view.WindowInsets$Type')
+                controller = window.getInsetsController()
+                if controller is not None:
+                    controller.hide(
+                        WindowInsets_Type.statusBars()
+                        | WindowInsets_Type.navigationBars()
+                    )
+                    controller.setSystemBarsBehavior(
+                        WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    )
+            except Exception:
+                pass
+        else:
+            # API 21-29: устаревшие флаги — всё ещё поддерживаются
+            View = autoclass('android.view.View')
+            flags = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            )
+            decor.setSystemUiVisibility(flags)
 
     _set_flags()
 
@@ -88,6 +129,12 @@ class GreenEnergyCityApp(App):
         sm.add_widget(GameOverScreen(name="gameover"))
         sm.current = "splash"
         return sm
+
+    def on_resume(self):
+        # Повторно включить режим погружения при возврате из фона:
+        # на Android система может восстановить строку состояния
+        # после нажатия кнопки «Домой» или переключения приложений.
+        _enable_immersive_mode()
 
 
 if __name__ == "__main__":
