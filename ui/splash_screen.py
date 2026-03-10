@@ -1,6 +1,6 @@
 """Экран-заставка при запуске Green Energy City.
 
-Показывает логотип (data/splash/presplash.jpg) в течение трёх секунд,
+Показывает логотип (data/splash/presplash.jpg) в течение пяти секунд,
 затем автоматически переходит на экран главного меню.
 """
 
@@ -16,7 +16,7 @@ from kivy.lang import Builder
 _PRESPLASH = os.path.join('data', 'splash', 'presplash.jpg')
 
 # Длительность отображения заставки в секундах
-_SPLASH_DURATION = 3.0
+_SPLASH_DURATION = 5.0
 
 Builder.load_string("""
 <SplashScreen>:

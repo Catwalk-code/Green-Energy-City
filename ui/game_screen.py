@@ -23,7 +23,7 @@ _ICON_POINT = os.path.join('data', 'icons', 'point.png')
 Builder.load_string("""
 <_StatBar>:
     orientation: 'vertical'
-    spacing: dp(1)
+    spacing: dp(2)
     # Точка — появляется над иконкой, когда тяга карточки затрагивает этот стат
     Image:
         source: root.point_icon
@@ -32,12 +32,11 @@ Builder.load_string("""
         allow_stretch: True
         keep_ratio: True
         opacity: 1 if root.dot_visible else 0
-    # Иконка характеристики — PNG-картинка (высота уменьшена с dp(22) до dp(20)
-    # чтобы разместить точку-индикатор сверху в той же полосе статов)
+    # Иконка характеристики — PNG-картинка
     Image:
         source: root.icon
         size_hint_y: None
-        height: dp(20)
+        height: dp(30)
         allow_stretch: True
         keep_ratio: True
     ProgressBar:
@@ -48,10 +47,10 @@ Builder.load_string("""
         height: dp(8)
     Label:
         text: root.label_text
-        font_size: sp(9)
+        font_size: sp(16)
         color: 0.85, 0.85, 0.85, 1
         size_hint_y: None
-        height: dp(14)
+        height: dp(22)
         halign: 'center'
         text_size: self.size
         valign: 'top'
@@ -107,7 +106,7 @@ class GameScreen(Screen):
         stats_panel = BoxLayout(
             orientation="horizontal",
             size_hint=(1, None),
-            height=dp(72),
+            height=dp(96),
             pos_hint={"top": 1},
             padding=(dp(10), dp(6)),
             spacing=dp(6),
@@ -121,11 +120,11 @@ class GameScreen(Screen):
         # ── Метка текущего года (начинается с 2026) ───────────────────
         self._year_label = Label(
             text="2026",
-            font_size="20sp",
+            font_size="28sp",
             bold=True,
             color=(0.6, 1.0, 0.6, 1),
             size_hint=(None, None),
-            size=(dp(120), dp(28)),
+            size=(dp(140), dp(36)),
             pos_hint={"center_x": 0.5},
             halign="center",
         )
@@ -144,8 +143,8 @@ class GameScreen(Screen):
 
     def _on_size(self, *_):
         w, h = self.size
-        stats_h = dp(72)
-        year_h  = dp(28)
+        stats_h = dp(96)
+        year_h  = dp(36)
         year_y  = h - stats_h - year_h - dp(4)
         self._year_label.y = year_y
 
