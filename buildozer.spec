@@ -4,10 +4,10 @@ package.name = greenenergycity
 package.domain = org.greenenergycity
 
 icon.filename = data/splash/icon.png
-presplash.filename = data/splash/presplash.jpg
-# Цвет фона presplash совпадает с фоном приложения — устраняет чёрную полосу
-# сверху на вытянутых экранах при переходе от заставки к приложению.
-android.presplash_color = #0a2008
+presplash.filename = data/splash/presplash.png
+# Цвет фона presplash совпадает с фоном заставки (белый),
+# а затем плавно переходит к тёмно-зелёному фону приложения.
+android.presplash_color = #ffffff
 
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas

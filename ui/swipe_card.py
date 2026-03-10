@@ -92,18 +92,18 @@ Builder.load_string("""
         color: 0.85, 0.15, 0.15, root.left_alpha
         opacity: root.left_alpha
         size_hint: None, None
-        size: root.width * 0.42, dp(36)
-        pos: root.right - root.width * 0.42 - dp(10), root.center_y - dp(18)
+        size: root.width - dp(32), dp(60)
+        pos: root.x + dp(16), root.center_y - dp(30)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
         canvas.before:
             Color:
-                rgba: 1, 0.85, 0.85, root.left_alpha * 0.55
+                rgba: 1, 0.85, 0.85, root.left_alpha * 0.85
             RoundedRectangle:
                 pos: self.pos
                 size: self.size
-                radius: [dp(8)]
+                radius: [dp(10)]
 
     # ── Метка правого варианта (свайп вправо) ────────────────────────
     Label:
@@ -113,18 +113,18 @@ Builder.load_string("""
         color: 0.1, 0.65, 0.1, root.right_alpha
         opacity: root.right_alpha
         size_hint: None, None
-        size: root.width * 0.42, dp(36)
-        pos: root.x + dp(10), root.center_y - dp(18)
+        size: root.width - dp(32), dp(60)
+        pos: root.x + dp(16), root.center_y - dp(30)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
         canvas.before:
             Color:
-                rgba: 0.85, 1, 0.85, root.right_alpha * 0.55
+                rgba: 0.85, 1, 0.85, root.right_alpha * 0.85
             RoundedRectangle:
                 pos: self.pos
                 size: self.size
-                radius: [dp(8)]
+                radius: [dp(10)]
 
     # ── Подсказка свайпа: [←картинка] [текст] [→картинка] ───────────
     BoxLayout:
