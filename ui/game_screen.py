@@ -47,10 +47,10 @@ Builder.load_string("""
         height: dp(8)
     Label:
         text: root.label_text
-        font_size: sp(16)
+        font_size: sp(18)
         color: 0.85, 0.85, 0.85, 1
         size_hint_y: None
-        height: dp(22)
+        height: dp(24)
         halign: 'center'
         text_size: self.size
         valign: 'top'
@@ -106,7 +106,7 @@ class GameScreen(Screen):
         stats_panel = BoxLayout(
             orientation="horizontal",
             size_hint=(1, None),
-            height=dp(96),
+            height=dp(100),
             pos_hint={"top": 1},
             padding=(dp(10), dp(6)),
             spacing=dp(6),
@@ -143,7 +143,7 @@ class GameScreen(Screen):
 
     def _on_size(self, *_):
         w, h = self.size
-        stats_h = dp(96)
+        stats_h = dp(100)
         year_h  = dp(36)
         year_y  = h - stats_h - year_h - dp(4)
         self._year_label.y = year_y

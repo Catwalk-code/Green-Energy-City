@@ -84,47 +84,51 @@ Builder.load_string("""
         halign: 'center'
         valign: 'middle'
 
-    # ── Метка левого варианта (свайп влево) ──────────────────────────
+    # ── Метка левого варианта (свайп влево) — справа на карточке ────
+    # Располагается в правой половине карточки, чтобы оставаться видимой
+    # при перетаскивании карточки влево (правая часть покидает экран последней)
     Label:
         text: root.left_text
-        font_size: sp(16)
+        font_size: sp(14)
         bold: True
         color: 0.85, 0.15, 0.15, root.left_alpha
         opacity: root.left_alpha
         size_hint: None, None
-        size: root.width * 0.42, dp(36)
-        pos: root.right - root.width * 0.42 - dp(10), root.center_y - dp(18)
+        size: dp(130), dp(90)
+        pos: root.x + root.width - dp(138), root.center_y - dp(45)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
         canvas.before:
             Color:
-                rgba: 1, 0.85, 0.85, root.left_alpha * 0.55
+                rgba: 1, 0.85, 0.85, root.left_alpha * 0.85
             RoundedRectangle:
                 pos: self.pos
                 size: self.size
-                radius: [dp(8)]
+                radius: [dp(10)]
 
-    # ── Метка правого варианта (свайп вправо) ────────────────────────
+    # ── Метка правого варианта (свайп вправо) — слева на карточке ───
+    # Располагается в левой половине карточки, чтобы оставаться видимой
+    # при перетаскивании карточки вправо (левая часть покидает экран последней)
     Label:
         text: root.right_text
-        font_size: sp(16)
+        font_size: sp(14)
         bold: True
         color: 0.1, 0.65, 0.1, root.right_alpha
         opacity: root.right_alpha
         size_hint: None, None
-        size: root.width * 0.42, dp(36)
-        pos: root.x + dp(10), root.center_y - dp(18)
+        size: dp(130), dp(90)
+        pos: root.x + dp(8), root.center_y - dp(45)
         halign: 'center'
         valign: 'middle'
         text_size: self.size
         canvas.before:
             Color:
-                rgba: 0.85, 1, 0.85, root.right_alpha * 0.55
+                rgba: 0.85, 1, 0.85, root.right_alpha * 0.85
             RoundedRectangle:
                 pos: self.pos
                 size: self.size
-                radius: [dp(8)]
+                radius: [dp(10)]
 
     # ── Подсказка свайпа: [←картинка] [текст] [→картинка] ───────────
     BoxLayout:
