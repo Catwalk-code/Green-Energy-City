@@ -133,6 +133,95 @@ class GreenEnergyCityApp(App):
         sm.current = "menu" if _is_android else "splash"
         return sm
 
+    def on_start(self):
+        """Проверить наличие сохранения при запуске приложения."""
+        from kivy.clock import Clock
+        Clock.schedule_once(self._check_save, 0.1)
+
+    def _check_save(self, *_):
+        """Показать popup загрузки сохранения, если файл save.json найден."""
+        from game.save import has_save, load_save, delete_save
+        from game import i18n
+        from kivy.uix.popup import Popup
+        from kivy.uix.boxlayout import BoxLayout
+        from kivy.uix.label import Label
+        from kivy.uix.button import Button
+        from kivy.metrics import dp
+
+        if not has_save():
+            return
+
+        data = load_save()
+        if data is None:
+            # Файл повреждён — удалить и запустить стандартно
+            delete_save()
+            return
+
+        content = BoxLayout(
+            orientation="vertical",
+            spacing=dp(10),
+            padding=(dp(12), dp(8)),
+        )
+        content.add_widget(Label(
+            text=i18n.t("save_found_body"),
+            font_size="15sp",
+            color=(0.85, 0.95, 0.85, 1),
+            halign="center",
+            valign="middle",
+            size_hint_y=1,
+        ))
+
+        buttons = BoxLayout(
+            orientation="horizontal",
+            spacing=dp(8),
+            size_hint_y=None,
+            height=dp(50),
+        )
+
+        popup = Popup(
+            title=i18n.t("save_found_title"),
+            content=content,
+            size_hint=(0.85, None),
+            height=dp(200),
+            auto_dismiss=False,
+            separator_color=(0.15, 0.7, 0.15, 1),
+            title_color=(0.4, 1.0, 0.4, 1),
+        )
+
+        def _new_game(*_):
+            delete_save()
+            popup.dismiss()
+
+        def _continue_save(*_):
+            popup.dismiss()
+            game_screen = self.root.get_screen("game")
+            game_screen._load_save_data = data
+            self.root.current = "game"
+
+        btn_new = Button(
+            text=i18n.t("new_game"),
+            font_size="14sp",
+            bold=True,
+            background_color=(0.2, 0.4, 0.2, 1),
+            color=(1, 1, 1, 1),
+        )
+        btn_new.bind(on_release=_new_game)
+
+        btn_continue = Button(
+            text=i18n.t("continue_save"),
+            font_size="14sp",
+            bold=True,
+            background_color=(0.15, 0.7, 0.15, 1),
+            color=(1, 1, 1, 1),
+        )
+        btn_continue.bind(on_release=_continue_save)
+
+        buttons.add_widget(btn_new)
+        buttons.add_widget(btn_continue)
+        content.add_widget(buttons)
+
+        popup.open()
+
     def on_resume(self):
         # Повторно включить режим погружения при возврате из фона:
         # на Android система может восстановить строку состояния

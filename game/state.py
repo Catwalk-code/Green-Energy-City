@@ -157,3 +157,27 @@ class GameState:
 
         self.current_card = self._get_next_card()
         return True
+
+    def restore(self, data: dict) -> None:
+        """Восстановить состояние игры из словаря сохранения.
+
+        Вызывает :meth:`reset` для инициализации колоды, затем перезаписывает
+        статы, год и счётчик решений из сохранения.  В качестве первой карточки
+        берётся следующая из колоды (вступительная карточка пропускается).
+
+        Args:
+            data: Словарь с ключами ``stats``, ``year``,
+                  ``decisions_count``, ``win_year``.
+        """
+        self.reset()
+        saved_stats = data.get("stats", {})
+        for stat in self.STATS:
+            if stat in saved_stats:
+                self.stats[stat] = max(0, min(100, int(saved_stats[stat])))
+        self.year = int(data.get("year", 2026))
+        self.decisions_count = int(data.get("decisions_count", 0))
+        self.win_year = int(data.get("win_year", GameState._difficulty_year))
+        # Обновить глобальный уровень сложности, чтобы он соответствовал сохранению
+        GameState._difficulty_year = self.win_year
+        # Пропустить вступительную карточку — перейти к первой карточке колоды
+        self.current_card = self._get_next_card()

@@ -94,6 +94,18 @@ _STRINGS: dict[str, dict[str, str]] = {
         'loss_environment_high': "Nature reclaimed the city and expelled its residents.",
         'loss_happiness_low':    "Citizens revolted and abandoned the city en masse.",
         'loss_happiness_high':   "People became too comfortable — work and progress stopped.",
+
+        # ── Popup подтверждения выхода (кнопка ☰ / системная кнопка "Назад") ──
+        'back_popup_title': 'Exit to Menu?',
+        'back_popup_body':  'Save your progress and return to the main menu?',
+        'continue_game':    'Continue Playing',
+        'save_and_exit':    'Save & Exit',
+
+        # ── Popup загрузки сохранения при запуске ─────────────────────────────
+        'save_found_title': 'Save Found',
+        'save_found_body':  'A saved game was found.\nContinue where you left off?',
+        'new_game':         'New Game',
+        'continue_save':    'Continue',
     },
 
     # ── Русский язык ──────────────────────────────────────────────────
@@ -149,5 +161,17 @@ _STRINGS: dict[str, dict[str, str]] = {
         'loss_environment_high': "Природа захватила город и вытеснила его жителей.",
         'loss_happiness_low':    "Жители устроили бунт и массово покинули город.",
         'loss_happiness_high':   "Люди стали слишком довольны — работа и прогресс остановились.",
+
+        # ── Popup подтверждения выхода (кнопка ☰ / системная кнопка "Назад") ──
+        'back_popup_title': 'Выйти в меню?',
+        'back_popup_body':  'Сохранить прогресс и вернуться в главное меню?',
+        'continue_game':    'Продолжить игру',
+        'save_and_exit':    'Сохранить и выйти',
+
+        # ── Popup загрузки сохранения при запуске ─────────────────────────────
+        'save_found_title': 'Найдено сохранение',
+        'save_found_body':  'Найдено сохранение игры.\nПродолжить с того места?',
+        'new_game':         'Новая игра',
+        'continue_save':    'Продолжить',
     },
 }
