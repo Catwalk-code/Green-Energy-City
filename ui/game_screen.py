@@ -8,17 +8,29 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.image import Image
 from kivy.uix.progressbar import ProgressBar
+from kivy.uix.popup import Popup
 from kivy.animation import Animation
+from kivy.uix.behaviors import ButtonBehavior
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
 
 from game.state import GameState
+from game.save import save_game, delete_save
 from game import i18n
 from ui.swipe_card import SwipeCard
 
 # Путь к иконке-точке для обозначения затрагиваемых характеристик
 _ICON_POINT = os.path.join('data', 'icons', 'point.png')
+# Иконка кнопки "В главное меню" — три полосы (PNG вместо символа ☰)
+_ICON_MENU  = os.path.join('data', 'icons', 'menu.png')
+
+
+class _IconButton(ButtonBehavior, Image):
+    """Нажимаемая кнопка-иконка (PNG-картинка с поведением кнопки)."""
 
 Builder.load_string("""
 <_StatBar>:
@@ -93,6 +105,10 @@ class GameScreen(Screen):
         self.game_state = GameState()
         self._stat_bars: dict[str, _StatBar] = {}
         self._current_card: SwipeCard | None = None
+        # Данные сохранения для загрузки при входе на экран (None = новая игра)
+        self._load_save_data: dict | None = None
+        # Флаг для предотвращения открытия нескольких popup одновременно
+        self._exit_popup_open: bool = False
         self._build_ui()
 
     # ------------------------------------------------------------------
@@ -139,6 +155,18 @@ class GameScreen(Screen):
         self.add_widget(root)
         self._root_layout = root
 
+        # ── Кнопка "В главное меню" (стрелка влево) в левом нижнем углу ──
+        self._menu_btn = _IconButton(
+            source=_ICON_MENU,
+            size_hint=(None, None),
+            size=(dp(44), dp(44)),
+            pos_hint={"x": 0.02, "y": 0.02},
+            allow_stretch=True,
+            keep_ratio=True,
+        )
+        self._menu_btn.bind(on_release=self._on_menu_btn)
+        root.add_widget(self._menu_btn)
+
         self.bind(size=self._on_size)
 
     def _on_size(self, *_):
@@ -169,10 +197,112 @@ class GameScreen(Screen):
         # Обновить подписи статов в соответствии с текущим языком
         for stat, _icon, label_key in self._STAT_META:
             self._stat_bars[stat].label_text = i18n.t(label_key)
-        # Начать новую игру
-        self.game_state.reset()
+        # Привязать обработчик системной кнопки "Назад" (Android)
+        Window.bind(on_keyboard=self._on_keyboard)
+        # Загрузить сохранение или начать новую игру
+        if self._load_save_data is not None:
+            self.game_state.restore(self._load_save_data)
+            self._load_save_data = None
+        else:
+            self.game_state.reset()
         self._refresh_stats()
         self._show_card()
+
+    def on_leave(self):
+        # Отвязать обработчик клавиатуры при уходе с экрана
+        Window.unbind(on_keyboard=self._on_keyboard)
+        self._exit_popup_open = False
+
+    # ------------------------------------------------------------------
+    # Навигация: кнопка ☰ и системная кнопка "Назад"
+    # ------------------------------------------------------------------
+
+    def _on_keyboard(self, _window, key, *_args) -> bool:
+        """Перехватить системную кнопку «Назад» (keycode 27 / ESC на Android).
+
+        Returns:
+            ``True`` — событие поглощено (приложение не закрывается);
+            ``False`` — обычная обработка.
+        """
+        if key == 27:  # Android back / ESC
+            self._show_exit_popup()
+            return True
+        return False
+
+    def _on_menu_btn(self, *_):
+        """Нажатие кнопки ☰ — открыть popup подтверждения выхода."""
+        self._show_exit_popup()
+
+    def _show_exit_popup(self):
+        """Показать модальное окно подтверждения сохранения и выхода в меню."""
+        if self._exit_popup_open:
+            return
+        self._exit_popup_open = True
+
+        content = BoxLayout(
+            orientation="vertical",
+            spacing=dp(10),
+            padding=(dp(12), dp(8)),
+        )
+        content.add_widget(Label(
+            text=i18n.t("back_popup_body"),
+            font_size="15sp",
+            color=(0.85, 0.95, 0.85, 1),
+            halign="center",
+            valign="middle",
+            size_hint_y=1,
+        ))
+
+        buttons = BoxLayout(
+            orientation="horizontal",
+            spacing=dp(8),
+            size_hint_y=None,
+            height=dp(50),
+        )
+
+        popup = Popup(
+            title=i18n.t("back_popup_title"),
+            content=content,
+            size_hint=(0.85, None),
+            height=dp(200),
+            auto_dismiss=False,
+            separator_color=(0.15, 0.7, 0.15, 1),
+            title_color=(0.4, 1.0, 0.4, 1),
+        )
+
+        def _do_continue(*_):
+            self._exit_popup_open = False
+            popup.dismiss()
+
+        def _do_save_exit(*_):
+            save_game(self.game_state)
+            self._exit_popup_open = False
+            popup.dismiss()
+            self.manager.current = "menu"
+
+        btn_continue = Button(
+            text=i18n.t("continue_game"),
+            font_size="14sp",
+            bold=True,
+            background_color=(0.15, 0.7, 0.15, 1),
+            color=(1, 1, 1, 1),
+        )
+        btn_continue.bind(on_release=_do_continue)
+
+        btn_exit = Button(
+            text=i18n.t("save_and_exit"),
+            font_size="14sp",
+            bold=True,
+            background_color=(0.55, 0.2, 0.1, 1),
+            color=(1, 1, 1, 1),
+        )
+        btn_exit.bind(on_release=_do_save_exit)
+
+        buttons.add_widget(btn_continue)
+        buttons.add_widget(btn_exit)
+        content.add_widget(buttons)
+
+        popup.open()
 
     # ------------------------------------------------------------------
     # Отображение карточек
@@ -250,6 +380,8 @@ class GameScreen(Screen):
 
     def _go_to_game_over(self):
         """Передать результат на экран конца игры и перейти туда."""
+        # Игра завершена — сохранение больше не актуально
+        delete_save()
         go_screen = self.manager.get_screen("gameover")
         go_screen.setup(
             win=self.game_state.win,
