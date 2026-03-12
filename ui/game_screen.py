@@ -13,7 +13,7 @@ from kivy.uix.image import Image
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.popup import Popup
 from kivy.animation import Animation
-from kivy.behaviors import ButtonBehavior
+from kivy.uix.behaviors import ButtonBehavior
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
