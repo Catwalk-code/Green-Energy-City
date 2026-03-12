@@ -244,27 +244,31 @@ class GameScreen(Screen):
             spacing=dp(10),
             padding=(dp(12), dp(8)),
         )
-        content.add_widget(Label(
+        lbl_body = Label(
             text=i18n.t("back_popup_body"),
             font_size="15sp",
             color=(0.85, 0.95, 0.85, 1),
             halign="center",
             valign="middle",
             size_hint_y=1,
-        ))
+        )
+        lbl_body.bind(
+            size=lambda lbl, val: setattr(lbl, "text_size", (val[0], None))
+        )
+        content.add_widget(lbl_body)
 
         buttons = BoxLayout(
             orientation="horizontal",
             spacing=dp(8),
             size_hint_y=None,
-            height=dp(50),
+            height=dp(60),
         )
 
         popup = Popup(
             title=i18n.t("back_popup_title"),
             content=content,
             size_hint=(0.85, None),
-            height=dp(200),
+            height=dp(220),
             auto_dismiss=False,
             separator_color=(0.15, 0.7, 0.15, 1),
             title_color=(0.4, 1.0, 0.4, 1),
@@ -284,8 +288,13 @@ class GameScreen(Screen):
             text=i18n.t("continue_game"),
             font_size="14sp",
             bold=True,
+            halign="center",
+            valign="middle",
             background_color=(0.15, 0.7, 0.15, 1),
             color=(1, 1, 1, 1),
+        )
+        btn_continue.bind(
+            size=lambda btn, val: setattr(btn, "text_size", (val[0], None))
         )
         btn_continue.bind(on_release=_do_continue)
 
@@ -293,8 +302,13 @@ class GameScreen(Screen):
             text=i18n.t("save_and_exit"),
             font_size="14sp",
             bold=True,
+            halign="center",
+            valign="middle",
             background_color=(0.55, 0.2, 0.1, 1),
             color=(1, 1, 1, 1),
+        )
+        btn_exit.bind(
+            size=lambda btn, val: setattr(btn, "text_size", (val[0], None))
         )
         btn_exit.bind(on_release=_do_save_exit)
 
@@ -347,6 +361,7 @@ class GameScreen(Screen):
         continues = self.game_state.apply_choice(direction)
         self._refresh_stats()
         if continues:
+            save_game(self.game_state)
             self._show_card()
         else:
             self._go_to_game_over()
