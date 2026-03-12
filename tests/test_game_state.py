@@ -245,5 +245,73 @@ class TestGameState(unittest.TestCase):
         self.assertEqual(self.gs.win_year, 2040)  # должен остаться 2040
 
 
+class TestGameStateRestore(unittest.TestCase):
+    """Тесты метода GameState.restore()."""
+
+    def setUp(self):
+        random.seed(42)
+        GameState.set_difficulty(2040)
+        self.gs = GameState()
+
+    def tearDown(self):
+        GameState.set_difficulty(2040)
+
+    def _make_save_data(self, **kwargs):
+        base = {
+            "stats": {"energy": 60, "economy": 55, "environment": 45, "happiness": 70},
+            "year": 2030,
+            "decisions_count": 16,
+            "win_year": 2035,
+        }
+        base.update(kwargs)
+        return base
+
+    def test_restore_sets_year(self):
+        self.gs.restore(self._make_save_data(year=2031))
+        self.assertEqual(self.gs.year, 2031)
+
+    def test_restore_sets_decisions_count(self):
+        self.gs.restore(self._make_save_data(decisions_count=20))
+        self.assertEqual(self.gs.decisions_count, 20)
+
+    def test_restore_sets_win_year(self):
+        self.gs.restore(self._make_save_data(win_year=2030))
+        self.assertEqual(self.gs.win_year, 2030)
+
+    def test_restore_sets_stats(self):
+        stats = {"energy": 65, "economy": 45, "environment": 55, "happiness": 80}
+        self.gs.restore(self._make_save_data(stats=stats))
+        self.assertEqual(self.gs.stats["energy"], 65)
+        self.assertEqual(self.gs.stats["economy"], 45)
+        self.assertEqual(self.gs.stats["environment"], 55)
+        self.assertEqual(self.gs.stats["happiness"], 80)
+
+    def test_restore_updates_global_difficulty(self):
+        self.gs.restore(self._make_save_data(win_year=2030))
+        self.assertEqual(GameState._difficulty_year, 2030)
+
+    def test_restore_current_card_is_not_intro(self):
+        from game.cards_data import INTRO_CARD
+        self.gs.restore(self._make_save_data())
+        self.assertNotEqual(self.gs.current_card.card_id, INTRO_CARD.card_id)
+
+    def test_restore_game_not_over(self):
+        self.gs.restore(self._make_save_data())
+        self.assertFalse(self.gs.game_over)
+
+    def test_restore_clamps_stats_to_valid_range(self):
+        stats = {"energy": 150, "economy": -10, "environment": 50, "happiness": 50}
+        self.gs.restore(self._make_save_data(stats=stats))
+        self.assertEqual(self.gs.stats["energy"], 100)
+        self.assertEqual(self.gs.stats["economy"], 0)
+
+    def test_restore_handles_missing_stats_gracefully(self):
+        data = {"year": 2028, "decisions_count": 4, "win_year": 2040, "stats": {}}
+        self.gs.restore(data)
+        # Stats not in save should remain at default reset value (50)
+        for stat in GameState.STATS:
+            self.assertEqual(self.gs.stats[stat], 50)
+
+
 if __name__ == "__main__":
     unittest.main()
