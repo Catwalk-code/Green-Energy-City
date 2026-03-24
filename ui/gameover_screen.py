@@ -140,7 +140,7 @@ class GameOverScreen(Screen):
         )
         col.add_widget(self._stats_label)
 
-        # Кнопка «Играть снова»
+        # Кнопка "Играть снова"
         self._play_again_btn = Button(
             text=i18n.t('play_again'),
             font_size="20sp",
@@ -154,7 +154,7 @@ class GameOverScreen(Screen):
         self._play_again_btn.bind(on_release=self._play_again)
         col.add_widget(self._play_again_btn)
 
-        # Кнопка «Главное меню»
+        # Кнопка "Главное меню"
         self._menu_btn = Button(
             text=i18n.t('main_menu'),
             font_size="16sp",

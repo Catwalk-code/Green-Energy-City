@@ -59,7 +59,7 @@ class MenuScreen(Screen):
     def _build_ui(self):
         root = FloatLayout()
 
-        # ── Кнопка смены языка (верхний правый угол) ──────────────────
+        #  Кнопка смены языка (верхний правый угол) 
         self._lang_btn = Button(
             text=i18n.t('lang_toggle'),
             font_size="16sp",
@@ -73,7 +73,7 @@ class MenuScreen(Screen):
         self._lang_btn.bind(on_release=self._toggle_lang)
         root.add_widget(self._lang_btn)
 
-        # ── Основной вертикальный блок (центр экрана) ─────────────────
+        #  Основной вертикальный блок (центр экрана) 
         col = BoxLayout(
             orientation="vertical",
             size_hint=(0.85, None),
@@ -115,7 +115,7 @@ class MenuScreen(Screen):
         )
         col.add_widget(self._subtitle_label)
 
-        # ── Раздел выбора сложности ───────────────────────────────────
+        #  Раздел выбора сложности 
         self._difficulty_label = Label(
             text=i18n.t('difficulty_label'),
             font_size="15sp",
@@ -165,10 +165,9 @@ class MenuScreen(Screen):
         root.add_widget(col)
         self.add_widget(root)
 
-    # ------------------------------------------------------------------
+    
     # Обработчики событий
-    # ------------------------------------------------------------------
-
+    
     def _select_difficulty(self, year: int, *_):
         """Выбрать уровень сложности и визуально выделить кнопку."""
         self._selected_year = year

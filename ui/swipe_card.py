@@ -1,4 +1,4 @@
-"""Виджет карточки с поддержкой свайпа для Green Energy City."""
+"""Виджет карточки с поддержкой свайпа для Green Energy City"""
 
 import os
 
@@ -21,7 +21,7 @@ Builder.load_string("""
     size_hint: None, None
     size: dp(300), dp(390)
 
-    # ── Фон карточки (с поворотом) ──────────────────────────────────
+    #  Фон карточки (с поворотом) 
     canvas.before:
         PushMatrix
         Rotate:
@@ -44,7 +44,7 @@ Builder.load_string("""
     canvas.after:
         PopMatrix
 
-    # ── Имя персонажа ────────────────────────────────────────────────
+    #  Имя персонажа 
     Label:
         text: root.character_name
         font_size: sp(17)
@@ -58,7 +58,7 @@ Builder.load_string("""
         valign: 'middle'
         text_size: self.size
 
-    # ── Горизонтальный разделитель ───────────────────────────────────
+    #  Горизонтальный разделитель 
     Widget:
         size_hint: None, None
         size: root.width - dp(32), dp(1)
@@ -71,7 +71,7 @@ Builder.load_string("""
                 pos: self.pos
                 size: self.size
 
-    # ── Текст карточки ───────────────────────────────────────────────
+    #  Текст карточки 
     Label:
         text: root.card_text
         font_size: sp(18)
@@ -84,7 +84,7 @@ Builder.load_string("""
         halign: 'center'
         valign: 'middle'
 
-    # ── Метка левого варианта (свайп влево) — справа на карточке ────
+    #  Метка левого варианта (свайп влево) — справа на карточке 
     # Располагается в правой половине карточки, чтобы оставаться видимой
     # при перетаскивании карточки влево (правая часть покидает экран последней)
     Label:
@@ -107,7 +107,7 @@ Builder.load_string("""
                 size: self.size
                 radius: [dp(10)]
 
-    # ── Метка правого варианта (свайп вправо) — слева на карточке ───
+    #  Метка правого варианта (свайп вправо) — слева на карточке 
     # Располагается в левой половине карточки, чтобы оставаться видимой
     # при перетаскивании карточки вправо (левая часть покидает экран последней)
     Label:
@@ -130,7 +130,7 @@ Builder.load_string("""
                 size: self.size
                 radius: [dp(10)]
 
-    # ── Подсказка свайпа: [←картинка] [текст] [→картинка] ───────────
+    #  Подсказка свайпа: [←картинка] [текст] [→картинка] 
     BoxLayout:
         orientation: 'horizontal'
         size_hint: None, None
@@ -197,10 +197,9 @@ class SwipeCard(FloatLayout):
         self._animating = False
         self._drag_direction = None  # текущее направление тяги (None / 'left' / 'right')
 
-    # ------------------------------------------------------------------
+    
     # Обработка касаний
-    # ------------------------------------------------------------------
-
+   
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos) and not self._animating:
             touch.grab(self)
@@ -273,10 +272,9 @@ class SwipeCard(FloatLayout):
 
         return True
 
-    # ------------------------------------------------------------------
+    
     # Анимации
-    # ------------------------------------------------------------------
-
+    
     def _swipe_out(self, direction):
         """Анимировать вылет карточки за край экрана."""
         self._animating = True

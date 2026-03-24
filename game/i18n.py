@@ -35,18 +35,18 @@ def t(key: str) -> str:
     return _STRINGS.get(_lang, _STRINGS['en']).get(key, key)
 
 
-# ──────────────────────────────────────────────────────────────────────
+
 # Словарь всех переводимых строк интерфейса
 # Ключи одинаковы для обоих языков; значения — переведённые строки.
-# ──────────────────────────────────────────────────────────────────────
+
 _STRINGS: dict[str, dict[str, str]] = {
 
-    # ── Английский язык ───────────────────────────────────────────────
+    #  Английский язык 
     'en': {
         # Кнопка переключения языка (показывает ДРУГОЙ язык)
         'lang_toggle': 'RU',
 
-        # ── Главное меню ──────────────────────────────────────────────
+        #  Главное меню 
         'play': 'PLAY',
         # Подзаголовок без указания года — год показывают кнопки сложности
         'menu_subtitle': (
@@ -55,22 +55,22 @@ _STRINGS: dict[str, dict[str, str]] = {
         ),
         'stats_legend': 'Energy   Economy   Environment   Happiness',
 
-        # ── Выбор сложности ───────────────────────────────────────────
+        #  Выбор сложности 
         'difficulty_label':  'Difficulty:',
         'difficulty_easy':   'Easy\n(2030)',
         'difficulty_medium': 'Medium\n(2035)',
         'difficulty_hard':   'Hard\n(2040)',
 
-        # ── Статусные полосы на игровом экране ────────────────────────
+        #  Статусные полосы на игровом экране 
         'stat_energy':      'Energy',
         'stat_economy':     'Economy',
         'stat_environment': 'Environ.',
         'stat_happiness':   'Happiness',
 
-        # ── Подсказка свайпа на карточке (без стрелок — они теперь картинки) ──
+        #  Подсказка свайпа на карточке (без стрелок — они теперь картинки) 
         'swipe_hint': 'swipe to decide',
 
-        # ── Экран конца игры ──────────────────────────────────────────
+        #  Экран конца игры 
         # Заголовки без эмодзи — вместо них показываются картинки win.png/lose.png
         'win_title':      'Victory!',
         'lose_title':     'Game Over',
@@ -79,13 +79,13 @@ _STRINGS: dict[str, dict[str, str]] = {
         'play_again':     'PLAY AGAIN',
         'main_menu':      'MAIN MENU',
 
-        # ── Причина победы (плейсхолдер {year} будет заменён) ─────────
+        #  Причина победы (плейсхолдер {year} будет заменён) 
         'win_reason': (
             "You guided the city to a green future!\n"
             "The year {year} has arrived — mission accomplished."
         ),
 
-        # ── Причины поражения (название_стат_уровень) ─────────────────
+        #  Причины поражения (название_стат_уровень) 
         'loss_energy_low':       "Power cuts became permanent.\nThe city went dark forever.",
         'loss_energy_high':      "The power grid collapsed completely from overload.",
         'loss_economy_low':      "The city went bankrupt.\nAll public services collapsed.",
@@ -95,25 +95,25 @@ _STRINGS: dict[str, dict[str, str]] = {
         'loss_happiness_low':    "Citizens revolted and abandoned the city en masse.",
         'loss_happiness_high':   "People became too comfortable — work and progress stopped.",
 
-        # ── Popup подтверждения выхода (кнопка ☰ / системная кнопка "Назад") ──
+        #  Popup подтверждения выхода (кнопка ☰ / системная кнопка "Назад") 
         'back_popup_title': 'Exit to Menu?',
         'back_popup_body':  'Save your progress and return to the main menu?',
         'continue_game':    'Continue Playing',
         'save_and_exit':    'Save & Exit',
 
-        # ── Popup загрузки сохранения при запуске ─────────────────────────────
+        #  Popup загрузки сохранения при запуске ─
         'save_found_title': 'Save Found',
         'save_found_body':  'A saved game was found.\nContinue where you left off?',
         'new_game':         'New Game',
         'continue_save':    'Continue',
     },
 
-    # ── Русский язык ──────────────────────────────────────────────────
+    #  Русский язык 
     'ru': {
         # Кнопка переключения языка (показывает ДРУГОЙ язык)
         'lang_toggle': 'EN',
 
-        # ── Главное меню ──────────────────────────────────────────────
+        #  Главное меню 
         'play': 'ИГРАТЬ',
         # Подзаголовок без указания года — год показывают кнопки сложности
         'menu_subtitle': (
@@ -122,22 +122,22 @@ _STRINGS: dict[str, dict[str, str]] = {
         ),
         'stats_legend': 'Энергия   Экономика   Природа   Счастье',
 
-        # ── Выбор сложности ───────────────────────────────────────────
+        #  Выбор сложности ─
         'difficulty_label':  'Сложность:',
         'difficulty_easy':   'Лёгкий\n(2030)',
         'difficulty_medium': 'Средний\n(2035)',
         'difficulty_hard':   'Сложный\n(2040)',
 
-        # ── Статусные полосы на игровом экране ────────────────────────
+        #  Статусные полосы на игровом экране 
         'stat_energy':      'Энергия',
         'stat_economy':     'Экономика',
         'stat_environment': 'Природа',
         'stat_happiness':   'Счастье',
 
-        # ── Подсказка свайпа на карточке (без стрелок — они теперь картинки) ──
+        #  Подсказка свайпа на карточке (без стрелок — они теперь картинки) 
         'swipe_hint': 'смахни для выбора',
 
-        # ── Экран конца игры ──────────────────────────────────────────
+        #  Экран конца игры 
         # Заголовки без эмодзи — вместо них показываются картинки win.png/lose.png
         'win_title':      'Победа!',
         'lose_title':     'Игра окончена',
@@ -146,13 +146,13 @@ _STRINGS: dict[str, dict[str, str]] = {
         'play_again':     'ИГРАТЬ СНОВА',
         'main_menu':      'ГЛАВНОЕ МЕНЮ',
 
-        # ── Причина победы (плейсхолдер {year} будет заменён) ─────────
+        #  Причина победы (плейсхолдер {year} будет заменён) 
         'win_reason': (
             "Вы привели город к зелёному будущему!\n"
             "Наступил {year} год — миссия выполнена."
         ),
 
-        # ── Причины поражения ─────────────────────────────────────────
+        #  Причины поражения 
         'loss_energy_low':       "Отключения света стали постоянными.\nГород погрузился во тьму навсегда.",
         'loss_energy_high':      "Сеть не выдержала нагрузки и полностью вышла из строя.",
         'loss_economy_low':      "Город остался без денег.\nВсе городские службы прекратили работу.",
@@ -162,13 +162,13 @@ _STRINGS: dict[str, dict[str, str]] = {
         'loss_happiness_low':    "Жители устроили бунт и массово покинули город.",
         'loss_happiness_high':   "Люди стали слишком довольны — работа и прогресс остановились.",
 
-        # ── Popup подтверждения выхода (кнопка ☰ / системная кнопка "Назад") ──
+        #  Popup подтверждения выхода (кнопка ☰ / системная кнопка "Назад") 
         'back_popup_title': 'Выйти в меню?',
         'back_popup_body':  'Сохранить прогресс и вернуться в главное меню?',
         'continue_game':    'Продолжить игру',
         'save_and_exit':    'Сохранить и выйти',
 
-        # ── Popup загрузки сохранения при запуске ─────────────────────────────
+        #  Popup загрузки сохранения при запуске 
         'save_found_title': 'Найдено сохранение',
         'save_found_body':  'Найдено сохранение игры.\nПродолжить с того места?',
         'new_game':         'Новая игра',

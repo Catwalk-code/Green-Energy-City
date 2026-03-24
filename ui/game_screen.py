@@ -111,14 +111,13 @@ class GameScreen(Screen):
         self._exit_popup_open: bool = False
         self._build_ui()
 
-    # ------------------------------------------------------------------
+    
     # Построение интерфейса
-    # ------------------------------------------------------------------
-
+    
     def _build_ui(self):
         root = FloatLayout()
 
-        # ── Панель характеристик (вверху экрана) ──────────────────────
+        #  Панель характеристик (вверху экрана) 
         stats_panel = BoxLayout(
             orientation="horizontal",
             size_hint=(1, None),
@@ -133,7 +132,7 @@ class GameScreen(Screen):
             stats_panel.add_widget(bar)
         root.add_widget(stats_panel)
 
-        # ── Метка текущего года (начинается с 2026) ───────────────────
+        #  Метка текущего года (начинается с 2026) 
         self._year_label = Label(
             text="2026",
             font_size="28sp",
@@ -146,7 +145,7 @@ class GameScreen(Screen):
         )
         root.add_widget(self._year_label)
 
-        # ── Область для карточек (центр ниже панели статов) ───────────
+        #  Область для карточек (центр ниже панели статов) 
         self._card_area = FloatLayout(
             size_hint=(1, None),
         )
@@ -155,7 +154,7 @@ class GameScreen(Screen):
         self.add_widget(root)
         self._root_layout = root
 
-        # ── Кнопка "В главное меню" (стрелка влево) в левом нижнем углу ──
+        #  Кнопка "В главное меню" (стрелка влево) в левом нижнем углу 
         self._menu_btn = _IconButton(
             source=_ICON_MENU,
             size_hint=(None, None),
@@ -189,9 +188,9 @@ class GameScreen(Screen):
         card.x = (area.width  - card.width)  / 2
         card.y = (area.height - card.height) / 2
 
-    # ------------------------------------------------------------------
+    
     # Жизненный цикл экрана
-    # ------------------------------------------------------------------
+    
 
     def on_enter(self):
         # Обновить подписи статов в соответствии с текущим языком
@@ -213,9 +212,9 @@ class GameScreen(Screen):
         Window.unbind(on_keyboard=self._on_keyboard)
         self._exit_popup_open = False
 
-    # ------------------------------------------------------------------
+    
     # Навигация: кнопка ☰ и системная кнопка "Назад"
-    # ------------------------------------------------------------------
+    
 
     def _on_keyboard(self, _window, key, *_args) -> bool:
         """Перехватить системную кнопку «Назад» (keycode 27 / ESC на Android).
@@ -318,10 +317,9 @@ class GameScreen(Screen):
 
         popup.open()
 
-    # ------------------------------------------------------------------
+    
     # Отображение карточек
-    # ------------------------------------------------------------------
-
+    
     def _show_card(self):
         """Показать текущую карточку игрового состояния с анимацией появления."""
         # Сбросить точки при смене карточки
@@ -352,10 +350,9 @@ class GameScreen(Screen):
 
         Animation(y=orig_y, opacity=1, duration=0.28, t="out_back").start(card)
 
-    # ------------------------------------------------------------------
+    
     # Обратные вызовы игровой логики
-    # ------------------------------------------------------------------
-
+    
     def _on_swipe(self, direction: str):
         """Обработать свайп: передать выбор игровому состоянию."""
         continues = self.game_state.apply_choice(direction)
