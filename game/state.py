@@ -36,10 +36,10 @@ class GameState:
     }
 
     # Выбранный год победы (изменяется методом set_difficulty)
-    _difficulty_year: int = 2040
+    _difficulty_year = 2040
 
     @classmethod
-    def set_difficulty(cls, year: int) -> None:
+    def set_difficulty(cls, year):
         """Установить год победы в соответствии с выбранной сложностью.
 
         Args:
@@ -70,7 +70,7 @@ class GameState:
 
         self._deck = list(cards)
         random.shuffle(self._deck)
-        self._played_ids: set[int] = set()
+        self._played_ids = set()
 
         # Первая карточка — всегда вступительная
         self.current_card = intro
@@ -80,14 +80,14 @@ class GameState:
     
     # Управление колодой карточек
     
-    def _check_conditions(self, card: Card) -> bool:
+    def _check_conditions(self, card):
         """Проверить, удовлетворяют ли текущие статы условиям карточки."""
         for stat, (min_val, max_val) in card.conditions.items():
             if not (min_val <= self.stats.get(stat, 50) <= max_val):
                 return False
         return True
 
-    def _get_next_card(self) -> Card:
+    def _get_next_card(self):
         """Вернуть следующую карточку, удовлетворяющую текущим условиям."""
         # Первый проход: приоритет условным карточкам, подходящим по стату
         for i, card in enumerate(self._deck):
@@ -110,7 +110,7 @@ class GameState:
     
     # Игровая логика
     
-    def apply_choice(self, direction: str) -> bool:
+    def apply_choice(self, direction):
         """Применить выбор игрока и обновить игровое состояние.
 
         Args:
@@ -156,7 +156,7 @@ class GameState:
         self.current_card = self._get_next_card()
         return True
 
-    def restore(self, data: dict) -> None:
+    def restore(self, data):
         """Восстановить состояние игры из словаря сохранения.
 
         Вызывает :meth:`reset` для инициализации колоды, затем перезаписывает
