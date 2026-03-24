@@ -1,7 +1,5 @@
 """Основной игровой экран для Green Energy City."""
 
-from __future__ import annotations
-
 import os
 
 from kivy.uix.screenmanager import Screen
@@ -182,7 +180,7 @@ class GameScreen(Screen):
         if self._current_card:
             self._centre_card(self._current_card)
 
-    def _centre_card(self, card: SwipeCard):
+    def _centre_card(self, card):
         """Разместить карточку в центре области карточек."""
         area  = self._card_area
         card.x = (area.width  - card.width)  / 2
@@ -216,7 +214,7 @@ class GameScreen(Screen):
     # Навигация: кнопка "Гамбургер-меню" и системная кнопка "Назад"
     
 
-    def _on_keyboard(self, _window, key, *_args) -> bool:
+    def _on_keyboard(self, _window, key, *_args):
         """Перехватить системную кнопку "Назад" (keycode 27 / ESC на Android).
 
         Returns:
@@ -353,7 +351,7 @@ class GameScreen(Screen):
     
     # Обратные вызовы игровой логики
     
-    def _on_swipe(self, direction: str):
+    def _on_swipe(self, direction):
         """Обработать свайп: передать выбор игровому состоянию."""
         continues = self.game_state.apply_choice(direction)
         self._refresh_stats()
@@ -363,7 +361,7 @@ class GameScreen(Screen):
         else:
             self._go_to_game_over()
 
-    def _on_drag(self, direction: str | None):
+    def _on_drag(self, direction):
         """Показать/скрыть точки над статами при тяге карточки.
 
         Args:

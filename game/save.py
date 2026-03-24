@@ -1,7 +1,5 @@
 """Сохранение и загрузка игрового прогресса для Green Energy City."""
 
-from __future__ import annotations
-
 import json
 import os
 
@@ -9,7 +7,7 @@ import os
 _SAVE_FILE = "save.json"
 
 
-def _save_path() -> str:
+def _save_path():
     """Вернуть полный путь к файлу сохранения.
 
     На Android возвращает путь внутри приватной директории приложения
@@ -25,12 +23,12 @@ def _save_path() -> str:
     return _SAVE_FILE
 
 
-def has_save() -> bool:
+def has_save():
     """Вернуть ``True``, если файл сохранения существует."""
     return os.path.isfile(_save_path())
 
 
-def save_game(state) -> None:
+def save_game(state):
     """Сохранить текущее состояние игры в файл JSON.
 
     Args:
@@ -50,7 +48,7 @@ def save_game(state) -> None:
         pass
 
 
-def load_save() -> dict | None:
+def load_save():
     """Загрузить данные из файла сохранения.
 
     Returns:
@@ -66,7 +64,7 @@ def load_save() -> dict | None:
         return None
 
 
-def delete_save() -> None:
+def delete_save():
     """Удалить файл сохранения, если он существует."""
     path = _save_path()
     try:
