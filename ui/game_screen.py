@@ -217,9 +217,8 @@ class GameScreen(Screen):
     def _on_keyboard(self, _window, key, *_args):
         """Перехватить системную кнопку "Назад" (keycode 27 / ESC на Android).
 
-        Returns:
-            ``True`` — событие поглощено (приложение не закрывается);
-            ``False`` — обычная обработка.
+        Возвращает ``True``, если событие поглощено (приложение не закрывается),
+        иначе ``False`` для обычной обработки.
         """
         if key == 27:  # Android back / ESC
             self._show_exit_popup()
