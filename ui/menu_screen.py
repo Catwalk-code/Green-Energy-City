@@ -51,7 +51,7 @@ class MenuScreen(Screen):
         self._lang_btn         = None
         self._difficulty_label = None
         # Кнопки сложности в порядке: лёгкий, средний, сложный
-        self._diff_btns: list[Button] = []
+        self._diff_btns = []
         # Выбранный год победы (по умолчанию — сложный уровень, 2040)
         self._selected_year = 2040
         self._build_ui()
@@ -168,7 +168,7 @@ class MenuScreen(Screen):
     
     # Обработчики событий
     
-    def _select_difficulty(self, year: int, *_):
+    def _select_difficulty(self, year, *_):
         """Выбрать уровень сложности и визуально выделить кнопку."""
         self._selected_year = year
         GameState.set_difficulty(year)

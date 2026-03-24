@@ -47,7 +47,7 @@ class GameOverScreen(Screen):
         self._menu_btn         = None
         self._build_ui()
 
-    def setup(self, *, win: bool, reason: str, year: int, decisions: int):
+    def setup(self, *, win, reason, year, decisions):
         """Сохранить результат игры для отображения при входе на экран."""
         self._win       = win
         self._reason    = reason
