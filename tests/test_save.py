@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch, MagicMock
 
-# Добавить корень репозитория в путь, чтобы импорты работали без установки пакета
+# Добавить корень репозитория в путь, чтобы работали импорты без установки пакета
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from game.save import save_game, load_save, has_save, delete_save
