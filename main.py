@@ -26,7 +26,7 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
 
-# Цвет фона приложения — заполняет всю область окна, включая края на
+# Цвет фона приложения заполняет всю область окна, включая края на
 # телефонах с вытянутым экраном, чтобы не было чёрных полос.
 _BG_COLOR = (0.04, 0.13, 0.04, 1)
 Window.clearcolor = _BG_COLOR
@@ -225,7 +225,7 @@ class GreenEnergyCityApp(App):
     def on_resume(self):
         # Повторно включить режим погружения при возврате из фона:
         # на Android система может восстановить строку состояния
-        # после нажатия кнопки «Домой» или переключения приложений.
+        # после нажатия кнопки "Домой" или переключения приложений.
         _enable_immersive_mode()
 
 

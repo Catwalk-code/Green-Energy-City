@@ -25,7 +25,7 @@ from ui.swipe_card import SwipeCard
 
 # Путь к иконке-точке для обозначения затрагиваемых характеристик
 _ICON_POINT = os.path.join('data', 'icons', 'point.png')
-# Иконка кнопки "В главное меню" — три полосы (PNG вместо символа ☰)
+# Иконка кнопки "В главное меню" — три полосы (PNG вместо символа)
 _ICON_MENU  = os.path.join('data', 'icons', 'menu.png')
 
 
@@ -213,11 +213,11 @@ class GameScreen(Screen):
         self._exit_popup_open = False
 
     
-    # Навигация: кнопка ☰ и системная кнопка "Назад"
+    # Навигация: кнопка "Гамбургер-меню" и системная кнопка "Назад"
     
 
     def _on_keyboard(self, _window, key, *_args) -> bool:
-        """Перехватить системную кнопку «Назад» (keycode 27 / ESC на Android).
+        """Перехватить системную кнопку "Назад" (keycode 27 / ESC на Android).
 
         Returns:
             ``True`` — событие поглощено (приложение не закрывается);
@@ -229,7 +229,7 @@ class GameScreen(Screen):
         return False
 
     def _on_menu_btn(self, *_):
-        """Нажатие кнопки ☰ — открыть popup подтверждения выхода."""
+        """Нажатие кнопки "Гамбургер-меню" — открыть popup подтверждения выхода."""
         self._show_exit_popup()
 
     def _show_exit_popup(self):
