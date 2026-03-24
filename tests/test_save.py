@@ -1,4 +1,4 @@
-"""Unit tests for game save/load functionality (no Kivy UI dependency)."""
+"""Модульные тесты сохранения/загрузки игры (без зависимости от Kivy UI)."""
 
 import sys
 import os
@@ -7,7 +7,7 @@ import tempfile
 import unittest
 from unittest.mock import patch, MagicMock
 
-# Add repo root to path so imports work without installing the package
+# Добавить корень репозитория в путь, чтобы работали импорты без установки пакета
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from game.save import save_game, load_save, has_save, delete_save
@@ -43,7 +43,7 @@ class TestSave(unittest.TestCase):
             os.remove(self.save_path)
         os.rmdir(self.tmpdir)
 
-    # ------------------------------------------------------------------ has_save
+    # Тесты has_save
     def test_has_save_false_when_no_file(self):
         self.assertFalse(has_save())
 
@@ -51,7 +51,7 @@ class TestSave(unittest.TestCase):
         save_game(_mock_state())
         self.assertTrue(has_save())
 
-    # ------------------------------------------------------------------ save_game / load_save
+    # Тесты save_game / load_save
     def test_save_creates_file(self):
         save_game(_mock_state())
         self.assertTrue(os.path.isfile(self.save_path))
@@ -90,7 +90,7 @@ class TestSave(unittest.TestCase):
         data = load_save()
         self.assertEqual(data["year"], 2032)
 
-    # ------------------------------------------------------------------ delete_save
+    # Тесты delete_save
     def test_delete_removes_file(self):
         save_game(_mock_state())
         self.assertTrue(has_save())
@@ -104,7 +104,7 @@ class TestSave(unittest.TestCase):
         except Exception as exc:
             self.fail(f"delete_save() raised an exception: {exc}")
 
-    # ------------------------------------------------------------------ corrupt file
+    # Тесты повреждённого файла
     def test_load_returns_none_on_corrupt_json(self):
         with open(self.save_path, "w") as f:
             f.write("not valid json {{{")

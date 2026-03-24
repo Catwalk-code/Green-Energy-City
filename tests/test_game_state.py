@@ -1,9 +1,9 @@
-"""Unit tests for game logic (no Kivy UI dependency)."""
+"""Модульные тесты игровой логики (без зависимости от Kivy UI)."""
 
 import sys
 import os
 
-# Add repo root to path so imports work without installing the package
+# Добавить корень репозитория в путь, чтобы работали импорты без установки пакета
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import unittest
@@ -53,7 +53,7 @@ class TestCard(unittest.TestCase):
 
 class TestGameState(unittest.TestCase):
     def setUp(self):
-        # Use a fixed seed for reproducibility
+        # Использовать фиксированный seed для воспроизводимости
         random.seed(42)
         self.gs = GameState()
 
@@ -61,7 +61,7 @@ class TestGameState(unittest.TestCase):
         # Восстановить сложность по умолчанию после каждого теста
         GameState.set_difficulty(2040)
 
-    # ------------------------------------------------------------------ reset
+    # Тесты reset
     def test_initial_stats(self):
         for stat in GameState.STATS:
             self.assertEqual(self.gs.stats[stat], 50)
@@ -76,7 +76,7 @@ class TestGameState(unittest.TestCase):
     def test_first_card_is_intro(self):
         self.assertEqual(self.gs.current_card.card_id, INTRO_CARD.card_id)
 
-    # ------------------------------------------------------------------ apply_choice
+    # Тесты apply_choice
     def test_apply_right_choice_changes_stats(self):
         card = self.gs.current_card
         effects = card.right_choice.effects
@@ -109,7 +109,7 @@ class TestGameState(unittest.TestCase):
 
     def test_stat_clamped_at_zero(self):
         self.gs.stats["energy"] = 5
-        # Force energy to drop below 0 via a choice with large negative effect
+        # Принудительно опустить энергию ниже 0 через выбор с большим отрицательным эффектом
         self.gs.current_card = Card(
             card_id=999,
             character="Test",
@@ -132,7 +132,7 @@ class TestGameState(unittest.TestCase):
         self.gs.apply_choice("right")
         self.assertEqual(self.gs.stats["energy"], 100)
 
-    # ------------------------------------------------------------------ game over
+    # Тесты завершения игры
     def test_game_over_when_stat_hits_zero(self):
         self.gs.stats["energy"] = 5
         self.gs.current_card = Card(
@@ -161,9 +161,9 @@ class TestGameState(unittest.TestCase):
         self.assertTrue(self.gs.game_over)
 
     def test_win_when_year_reaches_2040(self):
-        # Fast-forward year to 2039 and trigger the last increment
+        # Перемотать год до 2039 и вызвать последнее увеличение
         self.gs.year = 2039
-        self.gs.decisions_count = 3  # one more decision triggers year advance
+        self.gs.decisions_count = 3  # ещё одно решение увеличит год
         result = self.gs.apply_choice("right")
         self.assertFalse(result)
         self.assertTrue(self.gs.win)
@@ -174,7 +174,7 @@ class TestGameState(unittest.TestCase):
         self.assertTrue(result)
         self.assertFalse(self.gs.game_over)
 
-    # ------------------------------------------------------------------ card cycling
+    # Тесты смены карточек
     def test_next_card_changes_after_choice(self):
         first_id = self.gs.current_card.card_id
         self.gs.apply_choice("right")
@@ -201,7 +201,7 @@ class TestGameState(unittest.TestCase):
         for stat in GameState.STATS:
             self.assertEqual(self.gs.stats[stat], 50)
 
-    # ------------------------------------------------------------------ difficulty
+    # Тесты сложности
     def test_default_difficulty_is_hard(self):
         """По умолчанию уровень сложности — сложный (2040)."""
         self.assertEqual(self.gs.win_year, 2040)
@@ -308,7 +308,7 @@ class TestGameStateRestore(unittest.TestCase):
     def test_restore_handles_missing_stats_gracefully(self):
         data = {"year": 2028, "decisions_count": 4, "win_year": 2040, "stats": {}}
         self.gs.restore(data)
-        # Stats not in save should remain at default reset value (50)
+        # Статы, отсутствующие в сохранении, должны остаться со значением по умолчанию (50)
         for stat in GameState.STATS:
             self.assertEqual(self.gs.stats[stat], 50)
 
