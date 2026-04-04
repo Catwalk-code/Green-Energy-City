@@ -3,7 +3,6 @@
 import os
 
 from kivy.uix.screenmanager import Screen
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
@@ -24,65 +23,24 @@ from ui.swipe_card import SwipeCard
 # Путь к иконке-точке для обозначения затрагиваемых характеристик
 _ICON_POINT = os.path.join('data', 'icons', 'point.png')
 # Иконка кнопки "В главное меню" — три полосы (PNG вместо символа)
-_ICON_MENU  = os.path.join('data', 'icons', 'menu.png')
+_ICON_MENU = os.path.join('data', 'icons', 'menu.png')
+
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'game_screen.kv'))
 
 
 class _IconButton(ButtonBehavior, Image):
     """Нажимаемая кнопка-иконка (PNG-картинка с поведением кнопки)."""
 
-Builder.load_string("""
-<_StatBar>:
-    orientation: 'vertical'
-    spacing: dp(2)
-    # Точка — появляется над иконкой, когда тяга карточки затрагивает этот стат
-    Image:
-        source: root.point_icon
-        size_hint_y: None
-        height: dp(10)
-        allow_stretch: True
-        keep_ratio: True
-        opacity: 1 if root.dot_visible else 0
-    # Иконка характеристики — PNG-картинка
-    Image:
-        source: root.icon
-        size_hint_y: None
-        height: dp(30)
-        allow_stretch: True
-        keep_ratio: True
-    ProgressBar:
-        id: pb
-        max: 100
-        value: root.stat_value
-        size_hint_y: None
-        height: dp(8)
-    Label:
-        text: root.label_text
-        font_size: sp(13)
-        color: 0.85, 0.85, 0.85, 1
-        size_hint_y: None
-        height: dp(24)
-        halign: 'center'
-        text_size: self.size
-        valign: 'top'
-
-<GameScreen>:
-    canvas.before:
-        Color:
-            rgba: 0.04, 0.13, 0.04, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-""")
-
 
 class _StatBar(BoxLayout):
     from kivy.properties import StringProperty, NumericProperty, BooleanProperty
+
     # Путь к PNG-иконке характеристики
-    icon        = StringProperty("")
-    label_text  = StringProperty("")
-    stat_value  = NumericProperty(50)
+    icon = StringProperty("")
+    label_text = StringProperty("")
+    stat_value = NumericProperty(50)
     # Путь к иконке-точке (показывается во время тяги карточки)
-    point_icon  = StringProperty(_ICON_POINT)
+    point_icon = StringProperty(_ICON_POINT)
     # True — показать точку над иконкой; False — скрыть
     dot_visible = BooleanProperty(False)
 
@@ -90,12 +48,14 @@ class _StatBar(BoxLayout):
 class GameScreen(Screen):
     """Игровой экран со свайп-карточками и панелью характеристик."""
 
+    menu_icon = _ICON_MENU
+
     # Пары (ключ стата, путь к иконке, ключ перевода подписи)
     _STAT_META = [
-        ("energy",      GameState.STAT_ICONS["energy"],      "stat_energy"),
-        ("economy",     GameState.STAT_ICONS["economy"],     "stat_economy"),
+        ("energy", GameState.STAT_ICONS["energy"], "stat_energy"),
+        ("economy", GameState.STAT_ICONS["economy"], "stat_economy"),
         ("environment", GameState.STAT_ICONS["environment"], "stat_environment"),
-        ("happiness",   GameState.STAT_ICONS["happiness"],   "stat_happiness"),
+        ("happiness", GameState.STAT_ICONS["happiness"], "stat_happiness"),
     ]
 
     def __init__(self, **kwargs):
@@ -107,74 +67,39 @@ class GameScreen(Screen):
         self._load_save_data: dict | None = None
         # Флаг для предотвращения открытия нескольких popup одновременно
         self._exit_popup_open: bool = False
-        self._build_ui()
+        self._root_layout = None
+        self._year_label = None
+        self._card_area = None
+        self._menu_btn = None
 
-    
-    # Построение интерфейса
-    
-    def _build_ui(self):
-        root = FloatLayout()
+    def on_kv_post(self, _base_widget):
+        self._root_layout = self.ids.root_layout
+        self._year_label = self.ids.year_label
+        self._card_area = self.ids.card_area
+        self._menu_btn = self.ids.menu_btn
+        self._menu_btn.bind(on_release=self._on_menu_btn)
+        self._build_stats_panel()
+        self.bind(size=self._on_size)
+        self._on_size()
 
-        #  Панель характеристик (вверху экрана) 
-        stats_panel = BoxLayout(
-            orientation="horizontal",
-            size_hint=(1, None),
-            height=dp(100),
-            pos_hint={"top": 1},
-            padding=(dp(10), dp(6)),
-            spacing=dp(6),
-        )
+    def _build_stats_panel(self):
+        stats_panel = self.ids.stats_panel
+        stats_panel.clear_widgets()
+        self._stat_bars = {}
         for stat, icon, label_key in self._STAT_META:
             bar = _StatBar(icon=icon, label_text=i18n.t(label_key), stat_value=50)
             self._stat_bars[stat] = bar
             stats_panel.add_widget(bar)
-        root.add_widget(stats_panel)
-
-        #  Метка текущего года (начинается с 2026) 
-        self._year_label = Label(
-            text="2026",
-            font_size="28sp",
-            bold=True,
-            color=(0.6, 1.0, 0.6, 1),
-            size_hint=(None, None),
-            size=(dp(140), dp(36)),
-            pos_hint={"center_x": 0.5},
-            halign="center",
-        )
-        root.add_widget(self._year_label)
-
-        #  Область для карточек (центр ниже панели статов) 
-        self._card_area = FloatLayout(
-            size_hint=(1, None),
-        )
-        root.add_widget(self._card_area)
-
-        self.add_widget(root)
-        self._root_layout = root
-
-        #  Кнопка "В главное меню" (стрелка влево) в левом нижнем углу 
-        self._menu_btn = _IconButton(
-            source=_ICON_MENU,
-            size_hint=(None, None),
-            size=(dp(44), dp(44)),
-            pos_hint={"x": 0.02, "y": 0.02},
-            allow_stretch=True,
-            keep_ratio=True,
-        )
-        self._menu_btn.bind(on_release=self._on_menu_btn)
-        root.add_widget(self._menu_btn)
-
-        self.bind(size=self._on_size)
 
     def _on_size(self, *_):
         w, h = self.size
         stats_h = dp(100)
-        year_h  = dp(36)
-        year_y  = h - stats_h - year_h - dp(4)
+        year_h = dp(36)
+        year_y = h - stats_h - year_h - dp(4)
         self._year_label.y = year_y
 
         area_h = h - stats_h - year_h - dp(10)
-        self._card_area.y      = 0
+        self._card_area.y = 0
         self._card_area.height = area_h
 
         if self._current_card:
@@ -182,13 +107,9 @@ class GameScreen(Screen):
 
     def _centre_card(self, card):
         """Разместить карточку в центре области карточек."""
-        area  = self._card_area
-        card.x = (area.width  - card.width)  / 2
+        area = self._card_area
+        card.x = (area.width - card.width) / 2
         card.y = (area.height - card.height) / 2
-
-    
-    # Жизненный цикл экрана
-    
 
     def on_enter(self):
         # Обновить подписи статов в соответствии с текущим языком
@@ -209,10 +130,6 @@ class GameScreen(Screen):
         # Отвязать обработчик клавиатуры при уходе с экрана
         Window.unbind(on_keyboard=self._on_keyboard)
         self._exit_popup_open = False
-
-    
-    # Навигация: кнопка "Гамбургер-меню" и системная кнопка "Назад"
-    
 
     def _on_keyboard(self, _window, key, *_args):
         """Перехватить системную кнопку "Назад" (keycode 27 / ESC на Android).
@@ -314,9 +231,6 @@ class GameScreen(Screen):
 
         popup.open()
 
-    
-    # Отображение карточек
-    
     def _show_card(self):
         """Показать текущую карточку игрового состояния с анимацией появления."""
         # Сбросить точки при смене карточки
@@ -334,22 +248,19 @@ class GameScreen(Screen):
         )
         card.swipe_callback = self._on_swipe
         # Подключить обратный вызов для точек-индикаторов затрагиваемых статов
-        card.drag_callback  = self._on_drag
-        self._current_card  = card
+        card.drag_callback = self._on_drag
+        self._current_card = card
 
         self._centre_card(card)
 
         # Анимация появления снизу
-        orig_y  = card.y
-        card.y  = -card.height
+        orig_y = card.y
+        card.y = -card.height
         card.opacity = 0
         self._card_area.add_widget(card)
 
         Animation(y=orig_y, opacity=1, duration=0.28, t="out_back").start(card)
 
-    
-    # Обратные вызовы игровой логики
-    
     def _on_swipe(self, direction):
         """Обработать свайп: передать выбор игровому состоянию."""
         continues = self.game_state.apply_choice(direction)

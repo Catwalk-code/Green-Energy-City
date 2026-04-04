@@ -1,0 +1,75 @@
+<_StatBar>:
+    orientation: 'vertical'
+    spacing: dp(2)
+    Image:
+        source: root.point_icon
+        size_hint_y: None
+        height: dp(10)
+        allow_stretch: True
+        keep_ratio: True
+        opacity: 1 if root.dot_visible else 0
+    Image:
+        source: root.icon
+        size_hint_y: None
+        height: dp(30)
+        allow_stretch: True
+        keep_ratio: True
+    ProgressBar:
+        max: 100
+        value: root.stat_value
+        size_hint_y: None
+        height: dp(8)
+    Label:
+        text: root.label_text
+        font_size: sp(13)
+        color: 0.85, 0.85, 0.85, 1
+        size_hint_y: None
+        height: dp(24)
+        halign: 'center'
+        text_size: self.size
+        valign: 'top'
+
+<GameScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.04, 0.13, 0.04, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        id: root_layout
+
+        BoxLayout:
+            id: stats_panel
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: dp(100)
+            pos_hint: {'top': 1}
+            padding: dp(10), dp(6)
+            spacing: dp(6)
+
+        Label:
+            id: year_label
+            text: '2026'
+            font_size: '28sp'
+            bold: True
+            color: 0.6, 1.0, 0.6, 1
+            size_hint: None, None
+            size: dp(140), dp(36)
+            pos_hint: {'center_x': 0.5}
+            halign: 'center'
+            text_size: self.size
+
+        FloatLayout:
+            id: card_area
+            size_hint: 1, None
+
+        _IconButton:
+            id: menu_btn
+            source: root.menu_icon
+            size_hint: None, None
+            size: dp(44), dp(44)
+            pos_hint: {'x': 0.02, 'y': 0.02}
+            allow_stretch: True
+            keep_ratio: True
