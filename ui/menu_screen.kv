@@ -1,0 +1,88 @@
+<MenuScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.04, 0.13, 0.04, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        Button:
+            id: lang_btn
+            text: 'EN/RU'
+            font_size: '16sp'
+            bold: True
+            size_hint: None, None
+            size: dp(60), dp(40)
+            pos_hint: {'right': 0.98, 'top': 0.98}
+            background_color: 0.1, 0.4, 0.1, 1
+            color: 0.9, 1.0, 0.9, 1
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.85, None
+            height: dp(515)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.52}
+            spacing: dp(14)
+            padding: dp(16), dp(8)
+
+            Image:
+                source: root.app_icon
+                size_hint_y: None
+                height: dp(120)
+                allow_stretch: True
+                keep_ratio: True
+
+            Label:
+                text: 'Green Energy City'
+                font_size: '32sp'
+                bold: True
+                color: 0.4, 1.0, 0.4, 1
+                size_hint_y: None
+                height: dp(50)
+                halign: 'center'
+                text_size: self.size
+
+            Label:
+                id: subtitle_label
+                text: ''
+                font_size: '16sp'
+                color: 0.75, 0.95, 0.75, 1
+                size_hint_y: None
+                height: dp(60)
+                halign: 'center'
+                text_size: dp(290), None
+
+            Label:
+                id: difficulty_label
+                text: ''
+                font_size: '15sp'
+                color: 0.65, 0.9, 0.65, 1
+                size_hint_y: None
+                height: dp(26)
+                halign: 'center'
+                text_size: self.size
+
+            BoxLayout:
+                id: diff_row
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: dp(52)
+                spacing: dp(8)
+
+            Button:
+                id: play_btn
+                text: ''
+                font_size: '26sp'
+                bold: True
+                size_hint: None, None
+                size: dp(220), dp(60)
+                background_color: 0.15, 0.7, 0.15, 1
+                color: 1, 1, 1, 1
+                pos_hint: {'center_x': 0.5}
+
+        Button:
+            id: difficulty_button_template
+            opacity: 0
+            size_hint: 0, 0
+            disabled: True

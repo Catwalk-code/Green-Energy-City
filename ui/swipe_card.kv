@@ -1,0 +1,125 @@
+<SwipeCard>:
+    size_hint: None, None
+    size: dp(300), dp(390)
+
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.card_rotation
+            origin: root.center
+        Color:
+            rgba: 0, 0, 0, 0.18
+        RoundedRectangle:
+            pos: root.x + 4, root.y - 4
+            size: root.size
+            radius: [dp(18)]
+        Color:
+            rgba: root.card_color
+        RoundedRectangle:
+            pos: root.pos
+            size: root.size
+            radius: [dp(18)]
+    canvas.after:
+        PopMatrix
+
+    Label:
+        text: root.character_name
+        font_size: sp(17)
+        bold: True
+        color: 0.15, 0.45, 0.15, 1
+        size_hint: None, None
+        size: root.width - dp(32), dp(44)
+        pos: root.x + dp(16), root.top - dp(58)
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.size
+
+    Widget:
+        size_hint: None, None
+        size: root.width - dp(32), dp(1)
+        pos: root.x + dp(16), root.top - dp(62)
+        canvas:
+            Color:
+                rgba: 0.75, 0.9, 0.75, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    Label:
+        text: root.card_text
+        font_size: sp(18)
+        color: 0.12, 0.12, 0.12, 1
+        size_hint: None, None
+        size: root.width - dp(32), root.height - dp(140)
+        pos: root.x + dp(16), root.y + dp(60)
+        text_size: self.size
+        halign: 'center'
+        valign: 'middle'
+
+    Label:
+        text: root.left_text
+        font_size: sp(14)
+        bold: True
+        color: 0.85, 0.15, 0.15, root.left_alpha
+        opacity: root.left_alpha
+        size_hint: None, None
+        size: dp(130), dp(90)
+        pos: root.x + root.width - dp(138), root.center_y - dp(45)
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.size
+        canvas.before:
+            Color:
+                rgba: 1, 0.85, 0.85, root.left_alpha * 0.85
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [dp(10)]
+
+    Label:
+        text: root.right_text
+        font_size: sp(14)
+        bold: True
+        color: 0.1, 0.65, 0.1, root.right_alpha
+        opacity: root.right_alpha
+        size_hint: None, None
+        size: dp(130), dp(90)
+        pos: root.x + dp(8), root.center_y - dp(45)
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.size
+        canvas.before:
+            Color:
+                rgba: 0.85, 1, 0.85, root.right_alpha * 0.85
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [dp(10)]
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: None, None
+        size: root.width - dp(16), dp(28)
+        pos: root.x + dp(8), root.y + dp(8)
+        spacing: dp(4)
+        Image:
+            source: root.arrow_left_icon
+            size_hint: None, 1
+            width: dp(24)
+            allow_stretch: True
+            keep_ratio: True
+            opacity: 0.65
+        Label:
+            text: root.swipe_hint
+            font_size: sp(14)
+            color: 0.5, 0.5, 0.5, 0.75
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+        Image:
+            source: root.arrow_right_icon
+            size_hint: None, 1
+            width: dp(24)
+            allow_stretch: True
+            keep_ratio: True
+            opacity: 0.65

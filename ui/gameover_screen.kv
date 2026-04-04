@@ -1,0 +1,76 @@
+<GameOverScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.04, 0.13, 0.04, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 0.85, None
+            height: dp(460)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.55}
+            spacing: dp(14)
+            padding: dp(20), dp(10)
+
+            Image:
+                id: result_icon
+                source: ''
+                size_hint: None, None
+                size: dp(72), dp(72)
+                pos_hint: {'center_x': 0.5}
+                allow_stretch: True
+                keep_ratio: True
+
+            Label:
+                id: title_label
+                text: ''
+                font_size: '30sp'
+                bold: True
+                size_hint_y: None
+                height: dp(50)
+                halign: 'center'
+                text_size: self.size
+
+            Label:
+                id: reason_label
+                text: ''
+                font_size: '15sp'
+                color: 0.85, 0.95, 0.85, 1
+                size_hint_y: None
+                height: dp(80)
+                halign: 'center'
+                text_size: dp(280), None
+
+            Label:
+                id: stats_label
+                text: ''
+                font_size: '14sp'
+                color: 0.65, 0.85, 0.65, 1
+                size_hint_y: None
+                height: dp(55)
+                halign: 'center'
+                text_size: self.size
+
+            Button:
+                id: play_again_btn
+                text: ''
+                font_size: '20sp'
+                bold: True
+                size_hint: None, None
+                size: dp(200), dp(55)
+                background_color: 0.15, 0.7, 0.15, 1
+                color: 1, 1, 1, 1
+                pos_hint: {'center_x': 0.5}
+
+            Button:
+                id: menu_btn
+                text: ''
+                font_size: '16sp'
+                size_hint: None, None
+                size: dp(200), dp(44)
+                background_color: 0.2, 0.4, 0.2, 1
+                color: 0.9, 0.9, 0.9, 1
+                pos_hint: {'center_x': 0.5}

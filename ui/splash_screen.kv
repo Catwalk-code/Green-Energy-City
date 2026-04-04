@@ -1,0 +1,15 @@
+<SplashScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.04, 0.13, 0.04, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    FloatLayout:
+        Image:
+            source: root.presplash_source
+            allow_stretch: True
+            keep_ratio: True
+            size_hint: 1, 1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
