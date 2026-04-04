@@ -4,6 +4,7 @@ import os
 from functools import partial
 
 from kivy.uix.screenmanager import Screen
+from kivy.uix.button import Button
 from kivy.lang import Builder
 
 from game.state import GameState
@@ -50,7 +51,7 @@ class MenuScreen(Screen):
         self._diff_btns = []
         for key, year in _DIFFICULTY_OPTIONS:
             is_default = year == self._selected_year
-            btn = self.ids.difficulty_button_template.__class__(
+            btn = Button(
                 text=i18n.t(key),
                 font_size="14sp",
                 bold=True,

@@ -51,7 +51,7 @@
                 size_hint_y: None
                 height: dp(60)
                 halign: 'center'
-                text_size: dp(290), None
+                text_size: self.width, None
 
             Label:
                 id: difficulty_label
@@ -80,9 +80,3 @@
                 background_color: 0.15, 0.7, 0.15, 1
                 color: 1, 1, 1, 1
                 pos_hint: {'center_x': 0.5}
-
-        Button:
-            id: difficulty_button_template
-            opacity: 0
-            size_hint: 0, 0
-            disabled: True
