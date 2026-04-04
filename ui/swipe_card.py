@@ -13,172 +13,27 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 
 # Пути к иконкам стрелок подсказки свайпа
-_ICON_LEFT_ARROW  = os.path.join('data', 'icons', 'leftarrow.png')
+_ICON_LEFT_ARROW = os.path.join('data', 'icons', 'leftarrow.png')
 _ICON_RIGHT_ARROW = os.path.join('data', 'icons', 'rightarrow.png')
 
-Builder.load_string("""
-<SwipeCard>:
-    size_hint: None, None
-    size: dp(300), dp(390)
-
-    #  Фон карточки (с поворотом) 
-    canvas.before:
-        PushMatrix
-        Rotate:
-            angle: root.card_rotation
-            origin: root.center
-        # Мягкая тень
-        Color:
-            rgba: 0, 0, 0, 0.18
-        RoundedRectangle:
-            pos: root.x + 4, root.y - 4
-            size: root.size
-            radius: [dp(18)]
-        # Лицевая сторона карточки
-        Color:
-            rgba: root.card_color
-        RoundedRectangle:
-            pos: root.pos
-            size: root.size
-            radius: [dp(18)]
-    canvas.after:
-        PopMatrix
-
-    #  Имя персонажа 
-    Label:
-        text: root.character_name
-        font_size: sp(17)
-        bold: True
-        color: 0.15, 0.45, 0.15, 1
-        size_hint: None, None
-        size: root.width - dp(32), dp(44)
-        # dp(58) = dp(44) name height + dp(14) top margin
-        pos: root.x + dp(16), root.top - dp(58)
-        halign: 'center'
-        valign: 'middle'
-        text_size: self.size
-
-    #  Горизонтальный разделитель 
-    Widget:
-        size_hint: None, None
-        size: root.width - dp(32), dp(1)
-        # dp(62) = dp(58) name bottom + dp(4) gap
-        pos: root.x + dp(16), root.top - dp(62)
-        canvas:
-            Color:
-                rgba: 0.75, 0.9, 0.75, 1
-            Rectangle:
-                pos: self.pos
-                size: self.size
-
-    #  Текст карточки 
-    Label:
-        text: root.card_text
-        font_size: sp(18)
-        color: 0.12, 0.12, 0.12, 1
-        size_hint: None, None
-        # height = card height minus header (62dp) and footer (60dp from bottom) + 18dp adjustment
-        size: root.width - dp(32), root.height - dp(140)
-        pos: root.x + dp(16), root.y + dp(60)
-        text_size: self.size
-        halign: 'center'
-        valign: 'middle'
-
-    #  Метка левого варианта (свайп влево) - справа на карточке 
-    # Располагается в правой половине карточки, чтобы оставаться видимой
-    # при перетаскивании карточки влево (правая часть покидает экран последней)
-    Label:
-        text: root.left_text
-        font_size: sp(14)
-        bold: True
-        color: 0.85, 0.15, 0.15, root.left_alpha
-        opacity: root.left_alpha
-        size_hint: None, None
-        size: dp(130), dp(90)
-        pos: root.x + root.width - dp(138), root.center_y - dp(45)
-        halign: 'center'
-        valign: 'middle'
-        text_size: self.size
-        canvas.before:
-            Color:
-                rgba: 1, 0.85, 0.85, root.left_alpha * 0.85
-            RoundedRectangle:
-                pos: self.pos
-                size: self.size
-                radius: [dp(10)]
-
-    #  Метка правого варианта (свайп вправо) - слева на карточке 
-    # Располагается в левой половине карточки, чтобы оставаться видимой
-    # при перетаскивании карточки вправо (левая часть покидает экран последней)
-    Label:
-        text: root.right_text
-        font_size: sp(14)
-        bold: True
-        color: 0.1, 0.65, 0.1, root.right_alpha
-        opacity: root.right_alpha
-        size_hint: None, None
-        size: dp(130), dp(90)
-        pos: root.x + dp(8), root.center_y - dp(45)
-        halign: 'center'
-        valign: 'middle'
-        text_size: self.size
-        canvas.before:
-            Color:
-                rgba: 0.85, 1, 0.85, root.right_alpha * 0.85
-            RoundedRectangle:
-                pos: self.pos
-                size: self.size
-                radius: [dp(10)]
-
-    #  Подсказка свайпа: [←картинка] [текст] [→картинка] 
-    BoxLayout:
-        orientation: 'horizontal'
-        size_hint: None, None
-        size: root.width - dp(16), dp(28)
-        pos: root.x + dp(8), root.y + dp(8)
-        spacing: dp(4)
-        # Картинка левой стрелки
-        Image:
-            source: root.arrow_left_icon
-            size_hint: None, 1
-            width: dp(24)
-            allow_stretch: True
-            keep_ratio: True
-            opacity: 0.65
-        # Текст подсказки (без стрелок, зависит от языка)
-        Label:
-            text: root.swipe_hint
-            font_size: sp(14)
-            color: 0.5, 0.5, 0.5, 0.75
-            halign: 'center'
-            valign: 'middle'
-            text_size: self.size
-        # Картинка правой стрелки
-        Image:
-            source: root.arrow_right_icon
-            size_hint: None, 1
-            width: dp(24)
-            allow_stretch: True
-            keep_ratio: True
-            opacity: 0.65
-""")
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'swipe_card.kv'))
 
 
 class SwipeCard(FloatLayout):
     """Виджет карточки, которую можно смахнуть влево или вправо."""
 
-    card_rotation  = NumericProperty(0)
-    card_color     = ListProperty([1, 1, 1, 1])
+    card_rotation = NumericProperty(0)
+    card_color = ListProperty([1, 1, 1, 1])
     character_name = StringProperty("Character")
-    card_text      = StringProperty("Card text goes here.")
-    left_text      = StringProperty("No")
-    right_text     = StringProperty("Yes")
-    left_alpha     = NumericProperty(0)
-    right_alpha    = NumericProperty(0)
+    card_text = StringProperty("Card text goes here.")
+    left_text = StringProperty("No")
+    right_text = StringProperty("Yes")
+    left_alpha = NumericProperty(0)
+    right_alpha = NumericProperty(0)
     # Текст подсказки: без стрелок (они теперь картинки), обновляется при смене языка
-    swipe_hint      = StringProperty("swipe to decide")
+    swipe_hint = StringProperty("swipe to decide")
     # Пути к картинкам стрелок
-    arrow_left_icon  = StringProperty(_ICON_LEFT_ARROW)
+    arrow_left_icon = StringProperty(_ICON_LEFT_ARROW)
     arrow_right_icon = StringProperty(_ICON_RIGHT_ARROW)
 
     # Минимальное горизонтальное смещение (px) для подтверждения свайпа
@@ -197,9 +52,6 @@ class SwipeCard(FloatLayout):
         self._animating = False
         self._drag_direction = None  # текущее направление тяги (None / 'left' / 'right')
 
-    
-    # Обработка касаний
-   
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos) and not self._animating:
             touch.grab(self)
@@ -272,9 +124,6 @@ class SwipeCard(FloatLayout):
 
         return True
 
-    
-    # Анимации
-    
     def _swipe_out(self, direction):
         """Анимировать вылет карточки за край экрана."""
         self._animating = True

@@ -7,8 +7,6 @@
 import os
 
 from kivy.uix.screenmanager import Screen
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.lang import Builder
 
@@ -18,32 +16,17 @@ _PRESPLASH = os.path.join('data', 'splash', 'presplash.png')
 # Длительность отображения заставки в секундах
 _SPLASH_DURATION = 3.5
 
-Builder.load_string("""
-<SplashScreen>:
-    canvas.before:
-        Color:
-            rgba: 0.04, 0.13, 0.04, 1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-""")
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'splash_screen.kv'))
 
 
 class SplashScreen(Screen):
     """Заставка при запуске: показывает логотип и переходит в меню."""
 
+    presplash_source = _PRESPLASH
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._timer = None
-        root = FloatLayout()
-        root.add_widget(Image(
-            source=_PRESPLASH,
-            allow_stretch=True,
-            keep_ratio=True,
-            size_hint=(1, 1),
-            pos_hint={"center_x": 0.5, "center_y": 0.5},
-        ))
-        self.add_widget(root)
 
     def on_enter(self):
         """При переходе на экран запускаем таймер перехода в меню."""
