@@ -4,9 +4,6 @@ import os
 import random
 
 from game.card import Card
-# Английские и русские наборы карточек импортируются оба;
-# нужный выбирается в reset() в зависимости от текущего языка.
-from game.cards_data import CARDS as _CARDS_EN, INTRO_CARD as _INTRO_EN
 from game.cards_data_ru import CARDS as _CARDS_RU, INTRO_CARD as _INTRO_RU
 from game import i18n
 
@@ -64,9 +61,9 @@ class GameState:
         self.win = False
         self.game_over_reason = ""
 
-        # Выбрать колоду карточек по текущему языку интерфейса
-        cards = _CARDS_RU if i18n.get_lang() == 'ru' else _CARDS_EN
-        intro  = _INTRO_RU  if i18n.get_lang() == 'ru' else _INTRO_EN
+        # Выбрать колоду русских карточек
+        cards = _CARDS_RU
+        intro  = _INTRO_RU
 
         self._deck = list(cards)
         random.shuffle(self._deck)
