@@ -40,7 +40,7 @@ class GameState:
         """Установить год победы в соответствии с выбранной сложностью.
 
         Args:
-            year: Целевой год победы — 2030 (лёгкий), 2035 (средний) или 2040 (сложный).
+            year: Целевой год победы - 2030 (лёгкий), 2035 (средний) или 2040 (сложный).
         """
         if year in (2030, 2035, 2040):
             cls._difficulty_year = year
@@ -69,7 +69,7 @@ class GameState:
         random.shuffle(self._deck)
         self._played_ids = set()
 
-        # Первая карточка — всегда вступительная
+        # Первая карточка - всегда вступительная
         self.current_card = intro
         # Запомнить текущую колоду для перемешивания при исчерпании
         self._cards_pool = cards
@@ -98,7 +98,7 @@ class GameState:
                 self._deck.pop(i)
                 return card
 
-        # Колода исчерпана — перемешать только безусловные карточки
+        # Колода исчерпана - перемешать только безусловные карточки
         self._deck = [c for c in self._cards_pool if not c.conditions]
         random.shuffle(self._deck)
         self._played_ids.clear()
@@ -114,7 +114,7 @@ class GameState:
             direction: ``'left'`` (влево) или ``'right'`` (вправо).
 
         Returns:
-            ``True`` — игра продолжается; ``False`` — игра завершена.
+            ``True`` - игра продолжается; ``False`` - игра завершена.
         """
         card = self.current_card
         # Определить выбранный вариант в зависимости от направления свайпа
@@ -127,7 +127,7 @@ class GameState:
         self._played_ids.add(card.card_id)
         self.decisions_count += 1
 
-        # Каждые 4 решения — переходим к следующему году
+        # Каждые 4 решения - переходим к следующему году
         if self.decisions_count % 4 == 0:
             self.year += 1
 
@@ -174,5 +174,5 @@ class GameState:
         self.win_year = int(data.get("win_year", GameState._difficulty_year))
         # Обновить глобальный уровень сложности, чтобы он соответствовал сохранению
         GameState._difficulty_year = self.win_year
-        # Пропустить вступительную карточку — перейти к первой карточке колоды
+        # Пропустить вступительную карточку - перейти к первой карточке колоды
         self.current_card = self._get_next_card()
