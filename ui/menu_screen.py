@@ -19,7 +19,7 @@ Builder.load_file(os.path.join(os.path.dirname(__file__), 'menu_screen.kv'))
 _DIFF_ACTIVE = (0.1, 0.65, 0.1, 1)
 _DIFF_INACTIVE = (0.15, 0.35, 0.15, 1)
 
-# Единственный источник правды для уровней сложности —
+# Единственный источник правды для уровней сложности -
 # ключ перевода i18n и год победы из GameState.DIFFICULTY_YEARS
 _DIFFICULTY_OPTIONS = list(zip(
     ['difficulty_easy', 'difficulty_medium', 'difficulty_hard'],
@@ -35,7 +35,7 @@ class MenuScreen(Screen):
     def __init__(self, **kwargs):
         # Кнопки сложности в порядке: лёгкий, средний, сложный
         self._diff_btns = []
-        # Выбранный год победы (по умолчанию — сложный уровень, 2040)
+        # Выбранный год победы (по умолчанию - сложный уровень, 2040)
         self._selected_year = 2040
         super().__init__(**kwargs)
 

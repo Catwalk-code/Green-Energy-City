@@ -22,7 +22,7 @@ from ui.swipe_card import SwipeCard
 
 # Путь к иконке-точке для обозначения затрагиваемых характеристик
 _ICON_POINT = os.path.join('data', 'icons', 'point.png')
-# Иконка кнопки "В главное меню" — три полосы (PNG вместо символа)
+# Иконка кнопки "В главное меню" - три полосы (PNG вместо символа)
 _ICON_MENU = os.path.join('data', 'icons', 'menu.png')
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'game_screen.kv'))
@@ -41,7 +41,7 @@ class _StatBar(BoxLayout):
     stat_value = NumericProperty(50)
     # Путь к иконке-точке (показывается во время тяги карточки)
     point_icon = StringProperty(_ICON_POINT)
-    # True — показать точку над иконкой; False — скрыть
+    # True - показать точку над иконкой; False - скрыть
     dot_visible = BooleanProperty(False)
 
 
@@ -143,7 +143,7 @@ class GameScreen(Screen):
         return False
 
     def _on_menu_btn(self, *_):
-        """Нажатие кнопки "Гамбургер-меню" — открыть popup подтверждения выхода."""
+        """Нажатие кнопки "Гамбургер-меню" - открыть popup подтверждения выхода."""
         self._show_exit_popup()
 
     def _show_exit_popup(self):
@@ -243,7 +243,7 @@ class GameScreen(Screen):
             card_text=gc.text,
             left_text=gc.left_choice.text,
             right_text=gc.right_choice.text,
-            # Подсказка свайпа без стрелок (они — картинки в самом виджете)
+            # Подсказка свайпа без стрелок (они - картинки в самом виджете)
             swipe_hint=i18n.t('swipe_hint'),
         )
         card.swipe_callback = self._on_swipe
@@ -275,8 +275,8 @@ class GameScreen(Screen):
         """Показать/скрыть точки над статами при тяге карточки.
 
         Args:
-            direction: 'left' / 'right' — показать точки на статах,
-                       которые изменятся при этом выборе; None — скрыть все.
+            direction: 'left' / 'right' - показать точки на статах,
+                       которые изменятся при этом выборе; None - скрыть все.
         """
         if direction is None:
             self._clear_dots()
@@ -300,7 +300,7 @@ class GameScreen(Screen):
 
     def _go_to_game_over(self):
         """Передать результат на экран конца игры и перейти туда."""
-        # Игра завершена — сохранение больше не актуально
+        # Игра завершена - сохранение больше не актуально
         delete_save()
         go_screen = self.manager.get_screen("gameover")
         go_screen.setup(
