@@ -40,7 +40,6 @@ class MenuScreen(Screen):
         super().__init__(**kwargs)
 
     def on_kv_post(self, _base_widget):
-        self.ids.lang_btn.bind(on_release=self._toggle_lang)
         self.ids.play_btn.bind(on_release=self._start_game)
         self._build_difficulty_buttons()
         self._update_labels()
@@ -70,17 +69,10 @@ class MenuScreen(Screen):
         for btn, (_, btn_year) in zip(self._diff_btns, _DIFFICULTY_OPTIONS):
             btn.background_color = _DIFF_ACTIVE if btn_year == year else _DIFF_INACTIVE
 
-    def _toggle_lang(self, *_):
-        """Переключить язык (EN ↔ RU) и обновить все переводимые надписи."""
-        new_lang = 'ru' if i18n.get_lang() == 'en' else 'en'
-        i18n.set_lang(new_lang)
-        self._update_labels()
-
     def _update_labels(self):
         """Обновить тексты всех переводимых виджетов меню."""
         self.ids.subtitle_label.text = i18n.t('menu_subtitle')
         self.ids.play_btn.text = i18n.t('play')
-        self.ids.lang_btn.text = i18n.t('lang_toggle')
         self.ids.difficulty_label.text = i18n.t('difficulty_label')
         # Обновить тексты кнопок сложности через единый список _DIFFICULTY_OPTIONS
         for btn, (key, _) in zip(self._diff_btns, _DIFFICULTY_OPTIONS):
