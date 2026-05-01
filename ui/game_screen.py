@@ -59,7 +59,6 @@ class GameScreen(Screen):
     ]
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
         self.game_state = GameState()
         self._stat_bars: dict[str, _StatBar] = {}
         self._current_card: SwipeCard | None = None
@@ -71,6 +70,7 @@ class GameScreen(Screen):
         self._year_label = None
         self._card_area = None
         self._menu_btn = None
+        super().__init__(**kwargs)
 
     def on_kv_post(self, _base_widget):
         self._root_layout = self.ids.root_layout

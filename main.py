@@ -12,7 +12,7 @@ os.environ.setdefault("KIVY_BCK_COLOR", "0.04,0.13,0.04,1")
 
 from kivy.config import Config
 
-# На Android не устанавливаем фиксированный размер — используем родное разрешение.
+# На Android не устанавливаем фиксированный размер - используем родное разрешение.
 # На десктопе задаём окно 400×700 для удобства разработки.
 _is_android = hasattr(sys, 'getandroidapilevel') or os.environ.get('ANDROID_ARGUMENT')
 if not _is_android:
@@ -45,7 +45,7 @@ def _enable_immersive_mode():
         from android.runnable import run_on_ui_thread  # type: ignore[import]
         from jnius import autoclass                     # type: ignore[import]
     except ImportError:
-        # Не Android или jnius не установлен — пропускаем
+        # Не Android или jnius не установлен - пропускаем
         return
 
     @run_on_ui_thread
@@ -91,7 +91,7 @@ def _enable_immersive_mode():
             except Exception:
                 pass
         else:
-            # API 21-29: устаревшие флаги — всё ещё поддерживаются
+            # API 21-29: устаревшие флаги - всё ещё поддерживаются
             View = autoclass('android.view.View')
             flags = (
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -128,7 +128,7 @@ class GreenEnergyCityApp(App):
         sm.add_widget(GameScreen(name="game"))
         sm.add_widget(GameOverScreen(name="gameover"))
         # На Android нативная presplash (buildozer.spec) уже показала логотип
-        # пока грузилось приложение — повторный показ Python-заставки вызывает
+        # пока грузилось приложение - повторный показ Python-заставки вызывает
         # мерцание. Сразу переходим в меню. На десктопе показываем заставку.
         sm.current = "menu" if _is_android else "splash"
         return sm
@@ -153,7 +153,7 @@ class GreenEnergyCityApp(App):
 
         data = load_save()
         if data is None:
-            # Файл повреждён — удалить и запустить стандартно
+            # Файл повреждён - удалить и запустить стандартно
             delete_save()
             return
 

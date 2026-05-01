@@ -33,11 +33,11 @@ class MenuScreen(Screen):
     app_icon = _APP_ICON
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
         # Кнопки сложности в порядке: лёгкий, средний, сложный
         self._diff_btns = []
         # Выбранный год победы (по умолчанию — сложный уровень, 2040)
         self._selected_year = 2040
+        super().__init__(**kwargs)
 
     def on_kv_post(self, _base_widget):
         self.ids.lang_btn.bind(on_release=self._toggle_lang)
