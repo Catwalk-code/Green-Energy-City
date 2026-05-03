@@ -26,13 +26,14 @@ class GameOverScreen(Screen):
         self._decisions = 0
 
     def setup(self, *, win, reason, year, decisions):
-        """Сохранить результат игры для отображения при входе на экран."""
+        """Сохранить результат игры и немедленно обновить UI до начала перехода."""
         self._win = win
         self._reason = reason
         self._year = year
         self._decisions = decisions
+        self._update_ui()
 
-    def on_enter(self):
+    def _update_ui(self):
         """Обновить все надписи экрана по текущему языку и результату игры."""
         self.ids.result_icon.source = _WIN_ICON if self._win else _LOSE_ICON
 
@@ -51,6 +52,10 @@ class GameOverScreen(Screen):
 
         self.ids.play_again_btn.text = i18n.t('play_again')
         self.ids.menu_btn.text = i18n.t('main_menu')
+
+    def on_enter(self):
+        """Обновить все надписи экрана при входе (на случай смены языка)."""
+        self._update_ui()
 
     def on_kv_post(self, _base_widget):
         self.ids.play_again_btn.bind(on_release=self._play_again)
