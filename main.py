@@ -3,6 +3,9 @@
 import os
 import sys
 
+if getattr(sys, 'frozen', False):
+    os.chdir(os.path.dirname(sys.executable))
+    
 # Принудительный портретный режим
 os.environ.setdefault("KIVY_ORIENTATION", "Portrait")
 
