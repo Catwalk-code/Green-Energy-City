@@ -12,7 +12,7 @@ from game.resources import resource_path
 _WIN_ICON = resource_path(os.path.join('data', 'icons', 'win.png'))
 _LOSE_ICON = resource_path(os.path.join('data', 'icons', 'lose.png'))
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'gameover_screen.kv'))
+Builder.load_file(resource_path(os.path.join('ui', 'gameover_screen.kv')))
 
 
 class GameOverScreen(Screen):

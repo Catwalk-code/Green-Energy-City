@@ -26,7 +26,7 @@ _ICON_POINT = resource_path(os.path.join('data', 'icons', 'point.png'))
 # Иконка кнопки "В главное меню" - три полосы (PNG вместо символа)
 _ICON_MENU = resource_path(os.path.join('data', 'icons', 'menu.png'))
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'game_screen.kv'))
+Builder.load_file(resource_path(os.path.join('ui', 'game_screen.kv')))
 
 
 class _IconButton(ButtonBehavior, Image):

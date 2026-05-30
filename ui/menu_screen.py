@@ -14,7 +14,7 @@ from game.resources import resource_path
 # Путь к иконке приложения (отображается вместо эмодзи)
 _APP_ICON = resource_path(os.path.join('data', 'splash', 'icon.png'))
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'menu_screen.kv'))
+Builder.load_file(resource_path(os.path.join('ui', 'menu_screen.kv')))
 
 # Цвета кнопок сложности: активная / неактивная
 _DIFF_ACTIVE = (0.1, 0.65, 0.1, 1)

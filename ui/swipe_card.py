@@ -18,7 +18,7 @@ from game.resources import resource_path
 _ICON_LEFT_ARROW = resource_path(os.path.join('data', 'icons', 'leftarrow.png'))
 _ICON_RIGHT_ARROW = resource_path(os.path.join('data', 'icons', 'rightarrow.png'))
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'swipe_card.kv'))
+Builder.load_file(resource_path(os.path.join('ui', 'swipe_card.kv')))
 
 
 class SwipeCard(FloatLayout):
