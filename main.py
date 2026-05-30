@@ -3,6 +3,12 @@
 import os
 import sys
 
+def get_resource_path(relative_path):
+    """Возвращает корректный путь как для разработки, так и для .exe"""
+    if getattr(sys, 'frozen', False):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.abspath(relative_path)
+
 if getattr(sys, 'frozen', False):
     os.chdir(os.path.dirname(sys.executable))
     

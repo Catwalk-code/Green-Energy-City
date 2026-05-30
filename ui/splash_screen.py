@@ -16,7 +16,21 @@ _PRESPLASH = os.path.join('data', 'splash', 'presplash.png')
 # Длительность отображения заставки в секундах
 _SPLASH_DURATION = 3.5
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'splash_screen.kv'))
+import sys
+import os
+from kivy.lang import Builder
+
+def get_resource_path(relative_path):
+    """Возвращает абсолютный путь к файлу, работает и для разработки, и для .exe"""
+    if hasattr(sys, '_MEIPASS'):
+        # Запуск из собранного exe: файлы находятся во временной папке
+        return os.path.join(sys._MEIPASS, relative_path)
+    # Запуск из исходников: файлы находятся рядом с скриптом
+    return os.path.join(os.path.abspath("."), relative_path)
+
+# ИСПОЛЬЗУЙТЕ ЭТУ ФУНКЦИЮ ВМЕСТО ОБЫЧНОЙ СТРОКИ:
+kv_path = get_resource_path('ui/splash_screen.kv')
+Builder.load_file(kv_path)
 
 
 class SplashScreen(Screen):
