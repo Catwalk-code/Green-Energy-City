@@ -6,6 +6,7 @@ import random
 from game.card import Card
 from game.cards_data_ru import CARDS as _CARDS_RU, INTRO_CARD as _INTRO_RU
 from game import i18n
+from game.resources import resource_path
 
 
 class GameState:
@@ -16,10 +17,10 @@ class GameState:
 
     # Пути к иконкам характеристик (PNG-файлы вместо эмодзи)
     STAT_ICONS = {
-        "energy":      os.path.join('data', 'icons', 'energy.png'),
-        "economy":     os.path.join('data', 'icons', 'economy.png'),
-        "environment": os.path.join('data', 'icons', 'environment.png'),
-        "happiness":   os.path.join('data', 'icons', 'happiness.png'),
+        "energy":      resource_path(os.path.join('data', 'icons', 'energy.png')),
+        "economy":     resource_path(os.path.join('data', 'icons', 'economy.png')),
+        "environment": resource_path(os.path.join('data', 'icons', 'environment.png')),
+        "happiness":   resource_path(os.path.join('data', 'icons', 'happiness.png')),
     }
 
     # Максимальный год победы (режим «Сложно» / обратная совместимость)
