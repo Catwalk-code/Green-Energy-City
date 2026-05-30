@@ -18,12 +18,13 @@ from kivy.metrics import dp
 from game.state import GameState
 from game.save import save_game, delete_save
 from game import i18n
+from game.resources import resource_path
 from ui.swipe_card import SwipeCard
 
 # Путь к иконке-точке для обозначения затрагиваемых характеристик
-_ICON_POINT = os.path.join('data', 'icons', 'point.png')
+_ICON_POINT = resource_path(os.path.join('data', 'icons', 'point.png'))
 # Иконка кнопки "В главное меню" - три полосы (PNG вместо символа)
-_ICON_MENU = os.path.join('data', 'icons', 'menu.png')
+_ICON_MENU = resource_path(os.path.join('data', 'icons', 'menu.png'))
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'game_screen.kv'))
 

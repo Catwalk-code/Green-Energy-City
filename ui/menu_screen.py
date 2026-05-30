@@ -9,9 +9,10 @@ from kivy.lang import Builder
 
 from game.state import GameState
 from game import i18n
+from game.resources import resource_path
 
 # Путь к иконке приложения (отображается вместо эмодзи)
-_APP_ICON = os.path.join('data', 'splash', 'icon.png')
+_APP_ICON = resource_path(os.path.join('data', 'splash', 'icon.png'))
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'menu_screen.kv'))
 

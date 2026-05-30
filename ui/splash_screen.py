@@ -10,27 +10,15 @@ from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.lang import Builder
 
+from game.resources import resource_path
+
 # Путь к изображению заставки
-_PRESPLASH = os.path.join('data', 'splash', 'presplash.png')
+_PRESPLASH = resource_path(os.path.join('data', 'splash', 'presplash.png'))
 
 # Длительность отображения заставки в секундах
 _SPLASH_DURATION = 3.5
 
-import sys
-import os
-from kivy.lang import Builder
-
-def get_resource_path(relative_path):
-    """Возвращает абсолютный путь к файлу, работает и для разработки, и для .exe"""
-    if hasattr(sys, '_MEIPASS'):
-        # Запуск из собранного exe: файлы находятся во временной папке
-        return os.path.join(sys._MEIPASS, relative_path)
-    # Запуск из исходников: файлы находятся рядом с скриптом
-    return os.path.join(os.path.abspath("."), relative_path)
-
-# ИСПОЛЬЗУЙТЕ ЭТУ ФУНКЦИЮ ВМЕСТО ОБЫЧНОЙ СТРОКИ:
-kv_path = get_resource_path('ui/splash_screen.kv')
-Builder.load_file(kv_path)
+Builder.load_file(resource_path(os.path.join('ui', 'splash_screen.kv')))
 
 
 class SplashScreen(Screen):

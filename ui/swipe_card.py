@@ -12,9 +12,11 @@ from kivy.animation import Animation
 from kivy.core.window import Window
 from kivy.lang import Builder
 
+from game.resources import resource_path
+
 # Пути к иконкам стрелок подсказки свайпа
-_ICON_LEFT_ARROW = os.path.join('data', 'icons', 'leftarrow.png')
-_ICON_RIGHT_ARROW = os.path.join('data', 'icons', 'rightarrow.png')
+_ICON_LEFT_ARROW = resource_path(os.path.join('data', 'icons', 'leftarrow.png'))
+_ICON_RIGHT_ARROW = resource_path(os.path.join('data', 'icons', 'rightarrow.png'))
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'swipe_card.kv'))
 

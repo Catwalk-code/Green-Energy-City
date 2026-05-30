@@ -6,10 +6,11 @@ from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 
 from game import i18n
+from game.resources import resource_path
 
 # Пути к иконкам результата игры
-_WIN_ICON = os.path.join('data', 'icons', 'win.png')
-_LOSE_ICON = os.path.join('data', 'icons', 'lose.png')
+_WIN_ICON = resource_path(os.path.join('data', 'icons', 'win.png'))
+_LOSE_ICON = resource_path(os.path.join('data', 'icons', 'lose.png'))
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'gameover_screen.kv'))
 
