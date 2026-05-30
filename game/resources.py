@@ -8,8 +8,7 @@ import sys
 
 def resource_path(relative_path: str) -> str:
     """Вернуть абсолютный путь к ресурсу для dev и PyInstaller."""
-    base_dir = getattr(sys, "_MEIPASS", None)
-    if base_dir:
-        return os.path.join(base_dir, relative_path)
+    if getattr(sys, "frozen", False):
+        return os.path.join(sys._MEIPASS, relative_path)
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
     return os.path.join(project_root, relative_path)
